@@ -1,4 +1,6 @@
 # evernorth-color-codes
 Unity project. Encryption. Colours.
 
-Yup.
+It does stuff.
+
+Standard copyright laws apply.
