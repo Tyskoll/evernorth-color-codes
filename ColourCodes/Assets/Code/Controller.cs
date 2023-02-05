@@ -26,7 +26,7 @@ namespace Evernorth.ColourCodes
         public bool endOfStream;
         public bool bCasting;
 
-        public float ticker;
+        public float ticker = 0.0f;
 
         //UI
         public TMP_Text textInput;
@@ -35,6 +35,8 @@ namespace Evernorth.ColourCodes
         public Button btn_encrypt;
         public Button btn_send;
         public Button btn_decrypt;
+
+        public bool isRendering;
 
         // Start is called before the first frame update
         void Start()
@@ -60,6 +62,14 @@ namespace Evernorth.ColourCodes
             }
 
             return colorToCharKey;
+        }
+
+        public void RenderToggle()
+        {
+            if (!isRendering)
+                isRendering = true;
+            else if (isRendering)
+                isRendering = false;
         }
 
         public void EncryptString()
@@ -91,15 +101,30 @@ namespace Evernorth.ColourCodes
         // Update is called once per frame
         void Update()
         {
-            ticker = sendReceive.ticker;
             bCasting = sendReceive.bCasting;
             hasData = sendReceive.hasData;
             endOfStream = sendReceive.endOfStream;
             currentColor = sendReceive.colorOut;
-            
-            sendReceive.Update();
 
-            if(bCasting)
+            if(isRendering)
+            {
+                sendReceive.Update();
+            }
+
+            else
+            {
+                if (hasData && !endOfStream)
+                {
+                    sendReceive.RenderColor();
+                }
+
+                if (bCasting)
+                {
+                    ticker += Time.deltaTime;
+                }
+            }
+
+            if (bCasting)
             {
                 btn_encrypt.interactable = false;
                 btn_send.interactable = false;

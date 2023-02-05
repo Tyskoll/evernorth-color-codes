@@ -20,7 +20,7 @@ namespace Evernorth.ColourCodes
         public bool endOfStream = false;
         public bool bCasting = false;
 
-        public float ticker = 0.25f;
+        public float ticker = 0.0f;
 
         public SendReceive(Image colourImage, Light spotLight)
         {
@@ -63,8 +63,24 @@ namespace Evernorth.ColourCodes
             }
         }
 
+        public void RenderColor()
+        {
+            for(int i = 0; i < dataStream.Length; i++)
+            {
+                // Check if data has arrived and we're not at end of the data
+                if (hasData && !endOfStream)
+                {
+                    bCasting = true;
 
-        // Start is called before the first frame update
+                    // Grab new colour and assign it to our renderered objects
+                    Color32 newColor = NextColor();
+                    colorImage.color = newColor;
+                    colorOut = newColor;
+                }
+            }
+
+        }
+            // Start is called before the first frame update
         void Start()
         {
 
@@ -77,11 +93,14 @@ namespace Evernorth.ColourCodes
             if (hasData && !endOfStream)
             {
                 bCasting = true;
-
+                
                 if (ticker > 0f)
                 {
                     ticker -= Time.deltaTime;
+                    //ticker += Time.deltaTime;
                 }
+                
+                
                 else if (ticker <= 0f)
                 {
                     ticker = 0.25f;
@@ -98,9 +117,13 @@ namespace Evernorth.ColourCodes
                     Color32 newColor = NextColor();
                     colorImage.color = newColor;
                     colorOut = newColor;
-                    spotLight.color = newColor;
+                    //spotLight.color = newColor;
                     // Debug.Log($"Current color: {colorOut}");
                 }
+            }
+            else if(endOfStream)
+            {
+                //some stop timer thing
             }
         }
     }
