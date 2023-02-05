@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 namespace Evernorth.ColourCodes
 {
@@ -16,10 +12,10 @@ namespace Evernorth.ColourCodes
 
         public Decrypt(Dictionary<Vector3Int, char> colorToCharKey)
         {
-            this.ColorToCharKey = colorToCharKey;
-            
+            this.ColorToCharKey = colorToCharKey;      
         }
 
+        // Retrieve char from KeyPair dictionary based on colour Key provided
         char CharLookup(Vector3Int col)
         {
             char c;
@@ -29,6 +25,7 @@ namespace Evernorth.ColourCodes
             return c;
         }
 
+        // Build our string ready for output
         public string ColorToString(Vector3Int[] cArray)
         {
             string s = "";
@@ -42,6 +39,9 @@ namespace Evernorth.ColourCodes
             return s;
         }
 
+        // Receive Vector3Int array and assign values to dataStream[]
+        // This is just one way of acquiring the data and is sufficient 
+        // for proof of concept.
         public string ReceiveData(Vector3Int[] dStream)
         {
             Debug.Log("Decrypt.ReceiveData->");
@@ -49,6 +49,13 @@ namespace Evernorth.ColourCodes
             System.Array.Copy(dStream, colArray, dStream.Length);
 
             return ColorToString(colArray);
+        }
+
+        // To-do:
+        // Read pixel colour instead of values from array.
+        public void GetPixel()
+        {
+
         }
     }
 

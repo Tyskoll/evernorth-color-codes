@@ -9,35 +9,32 @@ namespace Evernorth.ColourCodes
 {
     public class Controller : MonoBehaviour
     {
+        //Classes
         public Encrypt encrypt;
         public Decrypt decrypt;
         public SendReceive sendReceive;
 
-
-
-        public TMP_Text textInput;
-        public TMP_Text textOutput;
-
-        public Button btn_encrypt;
-        public Button btn_send;
-        public Button btn_decrypt;
-
-
         Vector3Int[] eV3Data;
 
-
+        //Rendering
         public Image colorImage;
         public Light spotLight;
         public Color32 currentColor;
 
-
+        //Helpers
         public bool hasData;
         public bool endOfStream;
         public bool bCasting;
 
         public float ticker;
 
+        //UI
+        public TMP_Text textInput;
+        public TMP_Text textOutput;
 
+        public Button btn_encrypt;
+        public Button btn_send;
+        public Button btn_decrypt;
 
         // Start is called before the first frame update
         void Start()
@@ -47,7 +44,7 @@ namespace Evernorth.ColourCodes
 
             // Swap pairs
             Dictionary<Vector3Int, char> colorToCharKey = SwapPairs();
-            //Instantiate new Decrypt with swapped KeyValuePairs
+            // Instantiate new Decrypt with swapped KeyValuePairs
             decrypt = new Decrypt(colorToCharKey);
 
             sendReceive = new SendReceive(colorImage, spotLight);

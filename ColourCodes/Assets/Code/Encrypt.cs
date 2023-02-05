@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +18,7 @@ namespace Evernorth.ColourCodes
             AssignCharColors();
         }
 
+        // Cheeck if the index position is empty
         public bool IndexZero(Vector3Int cPos)
         {
             string c = CharArray3D[cPos.x, cPos.y, cPos.z].ToString();
@@ -32,11 +32,13 @@ namespace Evernorth.ColourCodes
             }
         }
 
+        // Add a KeyValuePair to the dictionary
         public void SetCharColorPair(Vector3Int col, char c)
         {
             CharToColorKey.Add(c, col);
         }
 
+        // Look up a character and get a Vector3Int from the dictionary
         Vector3Int ColorLookup(char c)
         {
             Vector3Int colV;
@@ -45,6 +47,7 @@ namespace Evernorth.ColourCodes
             return colV;
         }
 
+        // Encode our provided string as Vector3Int using ColorLookup()
         public Vector3Int[] StringToColor(string s)
         {
             Vector3Int[] cArray = new Vector3Int[s.Length];
@@ -62,6 +65,7 @@ namespace Evernorth.ColourCodes
             return cArray;
         }
 
+        // Generate random Vector3Int for each char in character string
         public void AssignCharColors()
         {
             int x;
@@ -89,7 +93,7 @@ namespace Evernorth.ColourCodes
                     }
                     else
                     {
-                        //Debug.Log($"Index not empty at: {cPos.ToString()}, occupied by: {CharArray3D[cPos.x, cPos.y, cPos.z].ToString()}");
+                        Debug.Log($"Index not empty at: {cPos.ToString()}, occupied by: {CharArray3D[cPos.x, cPos.y, cPos.z].ToString()}");
                     }
 
                 }

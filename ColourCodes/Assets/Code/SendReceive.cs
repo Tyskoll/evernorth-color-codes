@@ -1,21 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 namespace Evernorth.ColourCodes
 {
     public class SendReceive
     {
+        public Vector3Int[] dataStream;
+
+        // Rendering
         public Image colorImage;
         public Light spotLight;
         public Color32 charColour;
         public Color32 noColour = new Color32(255, 255, 255, 255);
-
         public Color32 colorOut;
-
-        public Vector3Int[] dataStream;
+        
+        // Helpers
         public int dataPos;
         public bool hasData = false;
         public bool endOfStream = false;
@@ -29,6 +28,7 @@ namespace Evernorth.ColourCodes
             this.spotLight=spotLight;
         }
 
+        // Receive Vector3Int array and assign values to dataStream[]
         public void ReceiveData(Vector3Int[] dStream)
         {
             Debug.Log("ReceiveData->");
@@ -37,6 +37,7 @@ namespace Evernorth.ColourCodes
             hasData = true;
         }
 
+        // Retrieve the Vector3Int value cast as bytes to encode Color32
         public Color32 NextColor()
         {
             Color32 nCol = Color.white;
@@ -55,8 +56,7 @@ namespace Evernorth.ColourCodes
                 return nCol;
             }
             else
-            {
-                
+            {             
                 hasData = false;
                 endOfStream = true;
                 return nCol;
@@ -73,6 +73,7 @@ namespace Evernorth.ColourCodes
         // Update is called once per frame
         public void Update()
         {
+            // Check if data has arrived and we're not at end of the data
             if (hasData && !endOfStream)
             {
                 bCasting = true;
@@ -93,11 +94,12 @@ namespace Evernorth.ColourCodes
                 }
                 else if (ticker <= 0.25f)
                 {
+                    // Grab new colour and assign it to our renderered objects
                     Color32 newColor = NextColor();
                     colorImage.color = newColor;
                     colorOut = newColor;
-                    //Debug.Log($"Current color: {colorOut}");
                     spotLight.color = newColor;
+                    // Debug.Log($"Current color: {colorOut}");
                 }
             }
         }
