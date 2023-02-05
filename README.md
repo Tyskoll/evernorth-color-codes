@@ -1,6 +1,4 @@
 # evernorth-color-codes
-Unity project. Encryption. Colours.
+Copyright 2023 Evernorth Software & Entertainment
 
-It does stuff.
-
-Standard copyright laws apply.
+It does things and stuff.
