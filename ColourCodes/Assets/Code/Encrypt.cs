@@ -11,6 +11,8 @@ namespace Evernorth.ColourCodes
 
         public Dictionary<char, Vector3Int> CharToColorKey;
 
+        public bool isEncrytped;
+
         public Encrypt()
         {
             CharArray3D = new char[255, 255, 255];
@@ -64,6 +66,7 @@ namespace Evernorth.ColourCodes
                 */
             }
 
+            isEncrytped = true;
             Debug.Log($"Encryption completed.");
 
             return cArray;

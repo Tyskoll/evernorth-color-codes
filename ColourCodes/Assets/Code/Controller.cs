@@ -22,9 +22,13 @@ namespace Evernorth.ColourCodes
         public Color32 currentColor;
 
         //Helpers
+        public bool isEncrypted;
+        public bool isDecrypted;
         public bool hasData;
-        public bool endOfStream;
         public bool bCasting;
+        public bool endOfStream;
+
+        public bool compareMatch;
 
         public float ticker;
 
@@ -36,6 +40,7 @@ namespace Evernorth.ColourCodes
         public Button btn_encrypt;
         public Button btn_send;
         public Button btn_decrypt;
+        public Button btn_strCompare;
 
         public bool isRendering;
 
@@ -79,7 +84,6 @@ namespace Evernorth.ColourCodes
             {
                 string s = textInput.text;
                 eV3Data = encrypt.StringToColor(s);
-                Debug.Log("btn_Encrypt->");
             }
         }
 
@@ -87,7 +91,6 @@ namespace Evernorth.ColourCodes
         {
             if (!hasData && !endOfStream)
             {
-                Debug.Log("btn_Send->");
                 sendReceive.ReceiveData(eV3Data);
             }
         }
@@ -97,6 +100,8 @@ namespace Evernorth.ColourCodes
             string s = decrypt.ReceiveData(sendReceive.dataStream);
 
             textOutput.text = s;
+
+            isDecrypted = true;
         }
 
         public void Validate()
@@ -106,14 +111,14 @@ namespace Evernorth.ColourCodes
             string i = textInput.text;
             string o = textOutput.text;
 
-            bool valid = string.Equals(i, o);
+            compareMatch = string.Equals(i, o);
 
-            if(valid)
+            if(compareMatch)
             {
                 textValidate.text = "Match";
                 textValidate.color = Color.green;
             }
-            else if(!valid)
+            else if(!compareMatch)
             {
                 textValidate.text = "Mismatch";
                 textValidate.color = Color.red;
@@ -124,6 +129,7 @@ namespace Evernorth.ColourCodes
         void Update()
         {
             ticker = sendReceive.ticker;
+            isEncrypted = encrypt.isEncrytped;
             bCasting = sendReceive.bCasting;
             hasData = sendReceive.hasData;
             endOfStream = sendReceive.endOfStream;
@@ -142,15 +148,30 @@ namespace Evernorth.ColourCodes
                 }
             }
 
+            if(isEncrypted && !hasData)
+            {
+                btn_encrypt.interactable = false;
+                btn_send.interactable = true;
+            }
+
             if (bCasting && !endOfStream)
             {
                 btn_encrypt.interactable = false;
                 btn_send.interactable = false;
                 btn_decrypt.interactable = false;
+                btn_strCompare.interactable = false;
             }
-            else if(endOfStream)
+            
+            if(endOfStream && !isDecrypted)
             {
+                btn_send.interactable = false;
                 btn_decrypt.interactable = true;
+            }
+
+            if(isDecrypted)
+            {
+                btn_decrypt.interactable = false;
+                btn_strCompare.interactable = true;
             }
         }
     }
