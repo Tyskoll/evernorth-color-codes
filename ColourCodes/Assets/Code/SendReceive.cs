@@ -33,7 +33,9 @@ namespace Evernorth.ColourCodes
         {
             Debug.Log("ReceiveData->");
             dataStream = dStream;
-
+            //dataStream = new Vector3Int[dStream.Length];
+            //System.Array.Copy(dStream, dataStream, dStream.Length);
+            
             hasData = true;
         }
 
@@ -42,43 +44,31 @@ namespace Evernorth.ColourCodes
         {
             Color32 nCol = Color.white;
 
-            if (dataPos < dataStream.Length)
-            {
-                nCol = new Color32((byte)dataStream[dataPos].x, (byte)dataStream[dataPos].y, (byte)dataStream[dataPos].z, 255);
-                dataPos++;
-                return nCol;
-            }
-            else if(dataPos >= dataStream.Length)
-            {
-                Debug.Log("-- End of Stream --");
-                endOfStream = true;
-                bCasting = false;
-                return nCol;
-            }
-            else
-            {             
-                hasData = false;
-                endOfStream = true;
-                return nCol;
-            }
+            nCol = new Color32((byte)dataStream[dataPos].x, (byte)dataStream[dataPos].y, (byte)dataStream[dataPos].z, 255);
+            dataPos++;
+            return nCol;
+
         }
 
         public void RenderColor()
         {
-            for(int i = 0; i < dataStream.Length; i++)
+            // Check if data has arrived and we're not at end of the data
+            if (hasData && !endOfStream)
             {
-                // Check if data has arrived and we're not at end of the data
-                if (hasData && !endOfStream)
-                {
-                    bCasting = true;
+                bCasting = true;
 
+                for (int i = 0; i < dataStream.Length; i++)
+                {
                     // Grab new colour and assign it to our renderered objects
                     Color32 newColor = NextColor();
                     colorImage.color = newColor;
                     colorOut = newColor;
                 }
-            }
 
+                endOfStream = true;
+                bCasting = false;
+                Debug.Log("-- End of Stream --");
+            }
         }
             // Start is called before the first frame update
         void Start()
@@ -99,8 +89,7 @@ namespace Evernorth.ColourCodes
                     ticker -= Time.deltaTime;
                     //ticker += Time.deltaTime;
                 }
-                
-                
+                        
                 else if (ticker <= 0f)
                 {
                     ticker = 0.25f;
