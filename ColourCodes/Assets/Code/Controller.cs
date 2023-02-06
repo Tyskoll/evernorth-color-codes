@@ -29,8 +29,10 @@ namespace Evernorth.ColourCodes
         public float ticker = 0.0f;
 
         //UI
-        public TMP_Text textInput;
+        public TMP_InputField textInput;
+        //public TMP_Text textInput;
         public TMP_Text textOutput;
+        public TMP_Text textValidate;
 
         public Button btn_encrypt;
         public Button btn_send;
@@ -96,6 +98,27 @@ namespace Evernorth.ColourCodes
             string s = decrypt.ReceiveData(sendReceive.dataStream);
 
             textOutput.text = s;
+        }
+
+        public void Validate()
+        {
+            //textInput.text = "NO U"; //to confirm mismatch works
+
+            string i = textInput.text;
+            string o = textOutput.text;
+
+            bool valid = string.Equals(i, o);
+
+            if(valid)
+            {
+                textValidate.text = "Match";
+                textValidate.color = Color.green;
+            }
+            else if(!valid)
+            {
+                textValidate.text = "Mismatch";
+                textValidate.color = Color.red;
+            }
         }
 
         // Update is called once per frame

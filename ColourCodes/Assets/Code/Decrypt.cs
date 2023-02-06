@@ -10,6 +10,9 @@ namespace Evernorth.ColourCodes
         public Vector3Int[] colArray;
         public string outputText;
 
+        Vector3Int colV = new Vector3Int(0, 0, 0);
+        char c = '\u0000';
+
         public Decrypt(Dictionary<Vector3Int, char> colorToCharKey)
         {
             this.ColorToCharKey = colorToCharKey;      
@@ -18,9 +21,22 @@ namespace Evernorth.ColourCodes
         // Retrieve char from KeyPair dictionary based on colour Key provided
         char CharLookup(Vector3Int col)
         {
-            char c;
-            Vector3Int colV = new Vector3Int(col.x, col.y, col.z);
-            ColorToCharKey.TryGetValue(colV, out c);
+            //Vector3Int colV = new Vector3Int(col.x, col.y, col.z);
+            //colV = new Vector3Int(col.x, col.y, col.z);
+
+            colV.x = col.x;
+            colV.y = col.y;
+            colV.z = col.z;
+
+            try
+            {
+                ColorToCharKey.TryGetValue(colV, out c);
+                return c;
+            }
+            catch(System.Exception e)
+            {
+                Debug.Log($"character not found for {colV.ToString()}");
+            }
 
             return c;
         }

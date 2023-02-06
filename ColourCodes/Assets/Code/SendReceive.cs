@@ -87,7 +87,6 @@ namespace Evernorth.ColourCodes
                 if (ticker > 0f)
                 {
                     ticker -= Time.deltaTime;
-                    //ticker += Time.deltaTime;
                 }
                         
                 else if (ticker <= 0f)

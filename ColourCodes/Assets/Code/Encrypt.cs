@@ -7,7 +7,7 @@ namespace Evernorth.ColourCodes
     public class Encrypt
     {
         public char[,,] CharArray3D;
-        public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>? \n\r";
+        public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r";
 
         public Dictionary<char, Vector3Int> CharToColorKey;
 
