@@ -56,11 +56,15 @@ namespace Evernorth.ColourCodes
             {
                 Vector3Int colV = ColorLookup(s[i]);
                 cArray[i] = colV;
+                /*
                 Debug.Log(
                     $"Char: {s[i]}\n" +
                     $"Colr: {colV}"
                     );
+                */
             }
+
+            Debug.Log($"Encryption completed.");
 
             return cArray;
         }

@@ -109,7 +109,7 @@ namespace Evernorth.ColourCodes
                 if (ticker > 0.25f)
                 {
                     colorImage.color = noColour;
-                    spotLight.color = noColour;
+                    //spotLight.color = noColour;
                 }
                 else if (ticker <= 0.25f)
                 {

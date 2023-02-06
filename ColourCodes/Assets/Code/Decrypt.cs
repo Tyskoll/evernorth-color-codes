@@ -45,7 +45,7 @@ namespace Evernorth.ColourCodes
         public string ReceiveData(Vector3Int[] dStream)
         {
             Debug.Log("Decrypt.ReceiveData->");
-
+            
             colArray = dStream;
 
             return ColorToString(colArray);
