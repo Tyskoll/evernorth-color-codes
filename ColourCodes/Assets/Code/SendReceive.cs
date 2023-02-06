@@ -32,8 +32,8 @@ namespace Evernorth.ColourCodes
         public void ReceiveData(Vector3Int[] dStream)
         {
             Debug.Log("ReceiveData->");
-            dataStream = new Vector3Int[dStream.Length];
-            System.Array.Copy(dStream, dataStream, dStream.Length);
+            dataStream = dStream;
+
             hasData = true;
         }
 
