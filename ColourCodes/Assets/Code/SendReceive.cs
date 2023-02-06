@@ -44,8 +44,19 @@ namespace Evernorth.ColourCodes
         {
             Color32 nCol = Color.white;
 
-            nCol = new Color32((byte)dataStream[dataPos].x, (byte)dataStream[dataPos].y, (byte)dataStream[dataPos].z, 255);
-            dataPos++;
+            if(dataPos < dataStream.Length)
+            {
+                nCol = new Color32((byte)dataStream[dataPos].x, (byte)dataStream[dataPos].y, (byte)dataStream[dataPos].z, 255);
+                dataPos++;
+                return nCol;
+            }
+            else
+            {
+                endOfStream = true;
+                bCasting = false;
+                Debug.Log("-- End of Stream --");
+            }
+
             return nCol;
 
         }
@@ -57,17 +68,10 @@ namespace Evernorth.ColourCodes
             {
                 bCasting = true;
 
-                for (int i = 0; i < dataStream.Length; i++)
-                {
-                    // Grab new colour and assign it to our renderered objects
-                    Color32 newColor = NextColor();
-                    colorImage.color = newColor;
-                    colorOut = newColor;
-                }
-
-                endOfStream = true;
-                bCasting = false;
-                Debug.Log("-- End of Stream --");
+                // Grab new colour and assign it to our renderered objects
+                Color32 newColor = NextColor();
+                colorImage.color = newColor;
+                colorOut = newColor;
             }
         }
             // Start is called before the first frame update
@@ -102,16 +106,14 @@ namespace Evernorth.ColourCodes
                 else if (ticker <= 0.25f)
                 {
                     // Grab new colour and assign it to our renderered objects
-                    Color32 newColor = NextColor();
-                    colorImage.color = newColor;
-                    colorOut = newColor;
+                    RenderColor();
+                    
                     //spotLight.color = newColor;
-                    // Debug.Log($"Current color: {colorOut}");
                 }
             }
             else if(endOfStream)
             {
-                //some stop timer thing
+                ticker = 0f;
             }
         }
     }
