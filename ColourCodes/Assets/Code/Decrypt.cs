@@ -13,6 +13,9 @@ namespace Evernorth.ColourCodes
         Vector3Int colV = new Vector3Int(0, 0, 0);
         char c = '\u0000';
 
+        public int dataPos;
+        public bool isDecrypting;
+
         public Decrypt(Dictionary<Vector3Int, char> colorToCharKey)
         {
             this.ColorToCharKey = colorToCharKey;      
@@ -46,11 +49,16 @@ namespace Evernorth.ColourCodes
         {
             string s = "";
 
+            isDecrypting = true;
+
             for (int i = 0; i < cArray.Length; i++)
             {
                 char c = CharLookup(cArray[i]);
                 s += c;
+                dataPos += 1;
             }
+
+            isDecrypting = false;
 
             return s;
         }
@@ -60,7 +68,7 @@ namespace Evernorth.ColourCodes
         // for proof of concept.
         public string ReceiveData(Vector3Int[] dStream)
         {
-            Debug.Log("Decrypt.ReceiveData->");
+            //Debug.Log("Decrypt.ReceiveData->");
             
             colArray = dStream;
 

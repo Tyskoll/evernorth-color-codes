@@ -27,6 +27,8 @@ namespace Evernorth.ColourCodes
         public bool hasData;
         public bool bCasting;
         public bool endOfStream;
+        public bool sentData;
+        public bool isDecrypting;
 
         public bool compareMatch;
 
@@ -41,6 +43,9 @@ namespace Evernorth.ColourCodes
         public Button btn_send;
         public Button btn_decrypt;
         public Button btn_strCompare;
+
+        public Slider slider_percentage;
+        //public Text percentage_txt;
 
         public bool isRendering;
 
@@ -91,6 +96,7 @@ namespace Evernorth.ColourCodes
         {
             if (!hasData && !endOfStream)
             {
+                sentData = true;
                 sendReceive.ReceiveData(eV3Data);
             }
         }
@@ -98,6 +104,8 @@ namespace Evernorth.ColourCodes
         public void DecryptData()
         {
             string s = decrypt.ReceiveData(sendReceive.dataStream);
+
+            ProgressBar();
 
             textOutput.text = s;
 
@@ -134,19 +142,7 @@ namespace Evernorth.ColourCodes
             hasData = sendReceive.hasData;
             endOfStream = sendReceive.endOfStream;
             currentColor = sendReceive.colorOut;
-
-            if(isRendering)
-            {
-                sendReceive.Update();
-            }
-
-            else
-            {
-                if (hasData && !endOfStream)
-                {
-                    sendReceive.RenderColor();
-                }
-            }
+            isDecrypting = decrypt.isDecrypting;
 
             if(isEncrypted && !hasData)
             {
@@ -173,7 +169,48 @@ namespace Evernorth.ColourCodes
                 btn_decrypt.interactable = false;
                 btn_strCompare.interactable = true;
             }
+
+            if (isRendering && sentData && !endOfStream)
+            {
+                Debug.Log("isRendering -> sendReceive.Update");
+                sendReceive.Update();
+            }
+            else if (!isRendering && sentData && !endOfStream && hasData)
+            {
+                btn_send.interactable = false;
+                btn_decrypt.interactable = true;
+
+                sendReceive.endOfStream = true;
+                Debug.Log("-- End of Stream --");
+                
+            }
+
+            if(isDecrypting)
+            {
+                ProgressBar();
+            }
         }
+
+        void ProgressBar()
+        {
+            float value = decrypt.dataPos;
+            float endValue = decrypt.colArray.Length;
+            float slideValue = 0.0f;
+
+            if (slideValue <= endValue)
+            {
+                UpdateSlider(slideValue);
+                slideValue = (value / endValue) * 100;
+            }
+
+        }
+
+        void UpdateSlider(float slideValue)
+        {
+            slider_percentage.value = slideValue;
+            //percentage_txt.text = slider.value.ToString();
+        }
+
     }
 
 }

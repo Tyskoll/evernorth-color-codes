@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ namespace Evernorth.ColourCodes
         public Light spotLight;
         public Color32 charColour;
         public Color32 noColour = new Color32(255, 255, 255, 255);
+        public Color32 newColor;
         public Color32 colorOut;
         
         // Helpers
@@ -69,17 +71,13 @@ namespace Evernorth.ColourCodes
                 bCasting = true;
 
                 // Grab new colour and assign it to our renderered objects
-                Color32 newColor = NextColor();
+                newColor = NextColor();
                 colorImage.color = newColor;
                 colorOut = newColor;
             }
         }
-            // Start is called before the first frame update
-        void Start()
-        {
 
-        }
-
+        
         // Update is called once per frame
         public void Update()
         {
@@ -116,6 +114,23 @@ namespace Evernorth.ColourCodes
                 ticker = 0f;
             }
         }
+        
+
+
+        /*
+        public IEnumerator Update()
+        {
+            while (hasData && !endOfStream)
+            {
+                bCasting = true;
+
+                yield return new WaitForSeconds(0.25f);
+
+                RenderColor();
+            }
+
+        }
+        */
     }
 }
 
