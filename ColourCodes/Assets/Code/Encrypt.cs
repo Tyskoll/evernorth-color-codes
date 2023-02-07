@@ -20,58 +20,6 @@ namespace Evernorth.ColourCodes
             AssignCharColors();
         }
 
-        // Cheeck if the index position is empty
-        public bool IndexZero(Vector3Int cPos)
-        {
-            string c = CharArray3D[cPos.x, cPos.y, cPos.z].ToString();
-
-            bool isZero = CharArray3D[cPos.x, cPos.y, cPos.z] == '\u0000';
-
-            switch (isZero)
-            {
-                case true: return true;
-                case false: return false;
-            }
-        }
-
-        // Add a KeyValuePair to the dictionary
-        public void SetCharColorPair(Vector3Int col, char c)
-        {
-            CharToColorKey.Add(c, col);
-        }
-
-        // Look up a character and get a Vector3Int from the dictionary
-        Vector3Int ColorLookup(char c)
-        {
-            Vector3Int colV;
-            CharToColorKey.TryGetValue(c, out colV);
-
-            return colV;
-        }
-
-        // Encode our provided string as Vector3Int using ColorLookup()
-        public Vector3Int[] StringToColor(string s)
-        {
-            Vector3Int[] cArray = new Vector3Int[s.Length];
-
-            for (int i = 0; i < cArray.Length; i++)
-            {
-                Vector3Int colV = ColorLookup(s[i]);
-                cArray[i] = colV;
-                /*
-                Debug.Log(
-                    $"Char: {s[i]}\n" +
-                    $"Colr: {colV}"
-                    );
-                */
-            }
-
-            isEncrytped = true;
-            Debug.Log($"Encryption completed.");
-
-            return cArray;
-        }
-
         // Generate random Vector3Int for each char in character string
         public void AssignCharColors()
         {
@@ -115,6 +63,62 @@ namespace Evernorth.ColourCodes
                 $"-- Dictionary Key -- \n" +
                 $"Length: {CharToColorKey.Count}");
         }
+
+        // Cheeck if the index position is empty
+        public bool IndexZero(Vector3Int cPos)
+        {
+            string c = CharArray3D[cPos.x, cPos.y, cPos.z].ToString();
+
+            bool isZero = CharArray3D[cPos.x, cPos.y, cPos.z] == '\u0000';
+
+            switch (isZero)
+            {
+                case true: return true;
+                case false: return false;
+            }
+        }
+
+        // Add a KeyValuePair to the dictionary
+        public void SetCharColorPair(Vector3Int col, char c)
+        {
+            CharToColorKey.Add(c, col);
+        }
+
+        // Encode our provided string as Vector3Int using ColorLookup()
+        public Vector3Int[] StringToColor(string s)
+        {
+            Vector3Int[] cArray = new Vector3Int[s.Length];
+
+            for (int i = 0; i < cArray.Length; i++)
+            {
+                Vector3Int colV = ColorLookup(s[i]);
+                cArray[i] = colV;
+                /*
+                Debug.Log(
+                    $"Char: {s[i]}\n" +
+                    $"Colr: {colV}"
+                    );
+                */
+            }
+
+            isEncrytped = true;
+            Debug.Log($"Encryption completed.");
+
+            return cArray;
+        }
+
+        // Look up a character and get a Vector3Int from the dictionary
+        Vector3Int ColorLookup(char c)
+        {
+            Vector3Int colV;
+            CharToColorKey.TryGetValue(c, out colV);
+
+            return colV;
+        }
+
+ 
+
+ 
     }
 
 }

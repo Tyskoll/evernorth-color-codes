@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading;
 
 namespace Evernorth.ColourCodes
 {
@@ -20,7 +18,6 @@ namespace Evernorth.ColourCodes
 
         //Rendering
         public Image colorImage;
-        public Light spotLight;
         public Color32 currentColor;
 
         //Helpers
@@ -40,6 +37,7 @@ namespace Evernorth.ColourCodes
         public TMP_InputField textInput;
         public TMP_InputField textOutput;
         public TMP_Text textValidate;
+        public TMP_Text textFileLength;
 
         public Button btn_encrypt;
         public Button btn_send;
@@ -59,6 +57,7 @@ namespace Evernorth.ColourCodes
         // Start is called before the first frame update
         void Start()
         {
+            Thread thread = Thread.CurrentThread;
             // Instantiate new Encrypt and generate KeyValuePairs
             encrypt = new Encrypt();
 
@@ -66,8 +65,8 @@ namespace Evernorth.ColourCodes
             Dictionary<Vector3Int, char> colorToCharKey = SwapPairs();
             // Instantiate new Decrypt with swapped KeyValuePairs
             decrypt = new Decrypt(colorToCharKey);
-
-            sendReceive = new SendReceive(colorImage, spotLight);
+            // Instantiate new SendReceive with image reference
+            sendReceive = new SendReceive(colorImage);
         }
 
         Dictionary<Vector3Int, char> SwapPairs()
@@ -81,7 +80,7 @@ namespace Evernorth.ColourCodes
 
             return colorToCharKey;
         }
-
+#region Buttons
         public void RenderToggle()
         {
             if (!isRendering)
@@ -96,6 +95,7 @@ namespace Evernorth.ColourCodes
             {
                 string s = textInput.text;
                 eV3Data = encrypt.StringToColor(s);
+                textFileLength.text = $"File Length: {s.Length.ToString("#,#")}";
             }
         }
 
@@ -110,21 +110,14 @@ namespace Evernorth.ColourCodes
 
         public void DecryptData()
         {
-
-
-            //string s = decrypt.ReceiveData(sendReceive.dataStream);
             decrypt.ReceiveData(sendReceive.dataStream);
 
             progressBar = ProgressBar();
             StartCoroutine(progressBar);
 
-            colorToString = decrypt.ColorToString(decrypt.colArray);
-            StartCoroutine(colorToString);
-
-            //textOutput.text = s;
-
-
-            //isDecrypted = true;
+            // Start a new thread to run decryption on
+            Thread t2 = new Thread(decrypt.DecryptStart);
+            t2.Start();
         }
 
         public void Validate()
@@ -147,7 +140,9 @@ namespace Evernorth.ColourCodes
                 textValidate.color = Color.red;
             }
         }
+#endregion
 
+#region Update
         // Update is called once per frame
         void Update()
         {
@@ -184,7 +179,8 @@ namespace Evernorth.ColourCodes
             {
                 btn_decrypt.interactable = false;
                 btn_strCompare.interactable = true;
-                StopCoroutine(colorToString);
+
+                UpdateSlider(100f); //<--- for when it decrypts too fast to update the progress bar.
                 StopCoroutine(progressBar);
                 textOutput.text = decrypt.outputText;
             }
@@ -200,40 +196,44 @@ namespace Evernorth.ColourCodes
 
                 sendReceive.endOfStream = true;
                 Debug.Log("-- End of Stream --");
-                
             }
 
 
         }
+#endregion
+
+#region ProgressBar
 
         IEnumerator ProgressBar()
         {
-            Debug.Log("Called: ProgressBar");
-
-            float slideValue = 0.0f;
-            //value = decrypt.dataPos;
-            float endValue = 0;
-
-            if(decrypt.colArray != null)
-                endValue = decrypt.colArray.Length;
-
-            while (value <= endValue) //for (int i = 0; i < endValue; i++) //
+            if (isDecrypted)
+                UpdateSlider(100f);
+            else
             {
-                value = decrypt.dataPos;
+                float slideValue = 0.0f;
+                float endValue = 0;
 
-                if (value != 0)
+                if (decrypt.colArray != null)
+                    endValue = decrypt.colArray.Length;
+
+                while (value <= endValue)
                 {
-                    slideValue = value / endValue * 100;
+                    value = decrypt.dataPos;
+
+                    if (value != 0)
+                    {
+                        slideValue = value / endValue * 100;
+                    }
+
+                    /*Debug.Log(
+                    $"dataPos: {value}\n" +
+                    $"slideValue: {slideValue}\n" +
+                    $"endValue: {endValue}");*/
+
+                    yield return new WaitForEndOfFrame();
+
+                    UpdateSlider(slideValue);
                 }
-
-                Debug.Log(
-                $"dataPos: {value}\n" +
-                $"slideValue: {slideValue}\n" +
-                $"endValue: {endValue}");
-
-                yield return new WaitForEndOfFrame();
-
-                UpdateSlider(slideValue);
             }
         }
 
@@ -246,7 +246,7 @@ namespace Evernorth.ColourCodes
                 sliderFillImage.color = Color.green;
             }
         }
-
+#endregion
     }
 
 }

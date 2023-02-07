@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 namespace Evernorth.ColourCodes
@@ -20,36 +23,27 @@ namespace Evernorth.ColourCodes
 
         public string outString;
 
+        public Vector3Int[] cArray;
+
         public Decrypt(Dictionary<Vector3Int, char> colorToCharKey)
         {
             this.ColorToCharKey = colorToCharKey;      
         }
 
-        // Retrieve char from KeyPair dictionary based on colour Key provided
-        char CharLookup(Vector3Int col)
+        // Receive Vector3Int array and assign values to dataStream[]
+        // This is just one way of acquiring the data and is sufficient 
+        // for proof of concept.
+        public void ReceiveData(Vector3Int[] dStream)
         {
-            //Vector3Int colV = new Vector3Int(col.x, col.y, col.z);
-            //colV = new Vector3Int(col.x, col.y, col.z);
-
-            colV.x = col.x;
-            colV.y = col.y;
-            colV.z = col.z;
-
-            try
-            {
-                ColorToCharKey.TryGetValue(colV, out c);
-                return c;
-            }
-            catch(System.Exception e)
-            {
-                Debug.Log($"character not found for {colV.ToString()}");
-            }
-
-            return c;
+            colArray = dStream;
         }
 
-        // Build our string ready for output
-        /*public string ColorToString(Vector3Int[] cArray)
+        public void DecryptStart()
+        {
+            ColorToString(colArray);
+        }
+        
+        public void ColorToString(Vector3Int[] cArray)
         {
             Debug.Log("called ColorToString");
             string s = "";
@@ -61,31 +55,11 @@ namespace Evernorth.ColourCodes
                 char c = CharLookup(cArray[i]);
                 s += c;
                 dataPos += 1;
-            }
 
-            isDecrypting = false;
-
-            return s;
-        }*/
-        public IEnumerator ColorToString(Vector3Int[] cArray)
-        {
-            Debug.Log("called ColorToString");
-            string s = "";
-
-            isDecrypting = true;
-
-            for (int i = 0; i < cArray.Length; i++)
-            {
+                //Debug.Log(
+                //    $"dataPos: {dataPos}\n" +
+                //    $"char:    {c}");
                 
-                yield return new WaitForEndOfFrame();
-                char c = CharLookup(cArray[i]);
-                s += c;
-                dataPos += 1;
-
-                Debug.Log(
-                    $"dataPos: {dataPos}\n" +
-                    $"char:    {c}");
-
                 if (dataPos >= cArray.Length)
                 {
                     isDecrypting = false;
@@ -95,29 +69,26 @@ namespace Evernorth.ColourCodes
             }
 
             outputText = s;
-            
-
-            //return s;
         }
 
-        // Receive Vector3Int array and assign values to dataStream[]
-        // This is just one way of acquiring the data and is sufficient 
-        // for proof of concept.
-        /*public string ReceiveData(Vector3Int[] dStream)
+        // Retrieve char from KeyPair dictionary based on colour Key provided
+        char CharLookup(Vector3Int col)
         {
-            //Debug.Log("Decrypt.ReceiveData->");
-            
-            colArray = dStream;
+            colV.x = col.x;
+            colV.y = col.y;
+            colV.z = col.z;
 
-            return ColorToString(colArray);
-        }*/
-        public void ReceiveData(Vector3Int[] dStream)
-        {
-            //Debug.Log("Decrypt.ReceiveData->");
+            try
+            {
+                ColorToCharKey.TryGetValue(colV, out c);
+                return c;
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log($"character not found for {colV.ToString()}");
+            }
 
-            colArray = dStream;
-
-            //return ColorToString(colArray);
+            return c;
         }
 
         // To-do:
