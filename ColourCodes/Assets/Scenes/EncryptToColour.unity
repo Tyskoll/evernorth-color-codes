@@ -4054,7 +4054,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorImage: {fileID: 1043965256}
-  spotLight: {fileID: 1804917348}
   currentColor:
     serializedVersion: 2
     rgba: 0
