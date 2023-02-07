@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,8 +46,13 @@ namespace Evernorth.ColourCodes
         public Button btn_decrypt;
         public Button btn_strCompare;
 
+        public float value;
         public Slider slider_percentage;
-        //public Text percentage_txt;
+        public TMP_Text percentage_txt;
+        public Image sliderFillImage;
+
+        private IEnumerator progressBar;
+        private IEnumerator colorToString;
 
         public bool isRendering;
 
@@ -103,13 +110,21 @@ namespace Evernorth.ColourCodes
 
         public void DecryptData()
         {
-            string s = decrypt.ReceiveData(sendReceive.dataStream);
 
-            ProgressBar();
 
-            textOutput.text = s;
+            //string s = decrypt.ReceiveData(sendReceive.dataStream);
+            decrypt.ReceiveData(sendReceive.dataStream);
 
-            isDecrypted = true;
+            progressBar = ProgressBar();
+            StartCoroutine(progressBar);
+
+            colorToString = decrypt.ColorToString(decrypt.colArray);
+            StartCoroutine(colorToString);
+
+            //textOutput.text = s;
+
+
+            //isDecrypted = true;
         }
 
         public void Validate()
@@ -143,6 +158,7 @@ namespace Evernorth.ColourCodes
             endOfStream = sendReceive.endOfStream;
             currentColor = sendReceive.colorOut;
             isDecrypting = decrypt.isDecrypting;
+            isDecrypted = decrypt.isDecrypted;
 
             if(isEncrypted && !hasData)
             {
@@ -168,11 +184,13 @@ namespace Evernorth.ColourCodes
             {
                 btn_decrypt.interactable = false;
                 btn_strCompare.interactable = true;
+                StopCoroutine(colorToString);
+                StopCoroutine(progressBar);
+                textOutput.text = decrypt.outputText;
             }
 
             if (isRendering && sentData && !endOfStream)
             {
-                Debug.Log("isRendering -> sendReceive.Update");
                 sendReceive.Update();
             }
             else if (!isRendering && sentData && !endOfStream && hasData)
@@ -185,30 +203,48 @@ namespace Evernorth.ColourCodes
                 
             }
 
-            if(isDecrypting)
-            {
-                ProgressBar();
-            }
+
         }
 
-        void ProgressBar()
+        IEnumerator ProgressBar()
         {
-            float value = decrypt.dataPos;
-            float endValue = decrypt.colArray.Length;
+            Debug.Log("Called: ProgressBar");
+
             float slideValue = 0.0f;
+            //value = decrypt.dataPos;
+            float endValue = 0;
 
-            if (slideValue <= endValue)
+            if(decrypt.colArray != null)
+                endValue = decrypt.colArray.Length;
+
+            while (value <= endValue) //for (int i = 0; i < endValue; i++) //
             {
-                UpdateSlider(slideValue);
-                slideValue = (value / endValue) * 100;
-            }
+                value = decrypt.dataPos;
 
+                if (value != 0)
+                {
+                    slideValue = value / endValue * 100;
+                }
+
+                Debug.Log(
+                $"dataPos: {value}\n" +
+                $"slideValue: {slideValue}\n" +
+                $"endValue: {endValue}");
+
+                yield return new WaitForEndOfFrame();
+
+                UpdateSlider(slideValue);
+            }
         }
 
         void UpdateSlider(float slideValue)
         {
             slider_percentage.value = slideValue;
-            //percentage_txt.text = slider.value.ToString();
+            percentage_txt.text = $"{Mathf.Round(slider_percentage.value)}%";
+            if(Mathf.Round(slider_percentage.value) == 100)
+            {
+                sliderFillImage.color = Color.green;
+            }
         }
 
     }

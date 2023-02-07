@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,9 @@ namespace Evernorth.ColourCodes
 
         public int dataPos;
         public bool isDecrypting;
+        public bool isDecrypted;
+
+        public string outString;
 
         public Decrypt(Dictionary<Vector3Int, char> colorToCharKey)
         {
@@ -45,8 +49,9 @@ namespace Evernorth.ColourCodes
         }
 
         // Build our string ready for output
-        public string ColorToString(Vector3Int[] cArray)
+        /*public string ColorToString(Vector3Int[] cArray)
         {
+            Debug.Log("called ColorToString");
             string s = "";
 
             isDecrypting = true;
@@ -61,18 +66,58 @@ namespace Evernorth.ColourCodes
             isDecrypting = false;
 
             return s;
+        }*/
+        public IEnumerator ColorToString(Vector3Int[] cArray)
+        {
+            Debug.Log("called ColorToString");
+            string s = "";
+
+            isDecrypting = true;
+
+            for (int i = 0; i < cArray.Length; i++)
+            {
+                
+                yield return new WaitForEndOfFrame();
+                char c = CharLookup(cArray[i]);
+                s += c;
+                dataPos += 1;
+
+                Debug.Log(
+                    $"dataPos: {dataPos}\n" +
+                    $"char:    {c}");
+
+                if (dataPos >= cArray.Length)
+                {
+                    isDecrypting = false;
+                    isDecrypted = true;
+                    Debug.Log($"End ColorToString");
+                }
+            }
+
+            outputText = s;
+            
+
+            //return s;
         }
 
         // Receive Vector3Int array and assign values to dataStream[]
         // This is just one way of acquiring the data and is sufficient 
         // for proof of concept.
-        public string ReceiveData(Vector3Int[] dStream)
+        /*public string ReceiveData(Vector3Int[] dStream)
         {
             //Debug.Log("Decrypt.ReceiveData->");
             
             colArray = dStream;
 
             return ColorToString(colArray);
+        }*/
+        public void ReceiveData(Vector3Int[] dStream)
+        {
+            //Debug.Log("Decrypt.ReceiveData->");
+
+            colArray = dStream;
+
+            //return ColorToString(colArray);
         }
 
         // To-do:
