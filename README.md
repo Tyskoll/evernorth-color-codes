@@ -1,6 +1,7 @@
 # evernorth-color-codes
 Copyright 2023 Evernorth Software & Entertainment
 
+Symmetric key cypher utilizing 3D arrays to encrypt to colour values.
 It does things and stuff.
 
 ./Sample Videos/
