@@ -48,10 +48,11 @@ namespace Evernorth.ColourCodes
         public Button btn_decrypt;
         public Button btn_strCompare;
 
-        public Toggle tgl_isRendering;
-        public Toggle tgl_isTexturing;
         public Toggle tgl_isString;
         public Toggle tgl_isVector3;
+        public Toggle tgl_isRendering;
+        public Toggle tgl_isTexturing;
+
 
         public float value;
         public Slider slider_percentage;
@@ -61,14 +62,18 @@ namespace Evernorth.ColourCodes
         private IEnumerator progressBar;
         private IEnumerator colorToString;
 
-        public bool isTexturing = false;
-        public bool isRendering = false;
         public bool isString = true;
         public bool isVector3 = false;
+        public bool isTexturing = false;
+        public bool isRendering = false;
+
 
         // Start is called before the first frame update
         void Start()
         {
+            SetToggles();
+
+
             Thread thread = Thread.CurrentThread;
             // Instantiate new Encrypt and generate KeyValuePairs
             encrypt = new Encrypt();
@@ -109,7 +114,20 @@ namespace Evernorth.ColourCodes
 
 
 
-        #region Buttons
+        #region UI
+        public void SetToggles()
+        {
+            isString = true;
+            isVector3 = false;
+            isTexturing = false;
+            isRendering = false;
+
+            tgl_isString.interactable = true;
+            tgl_isVector3.interactable = true;
+            tgl_isRendering.interactable = false;
+            tgl_isTexturing.interactable = false;
+        }
+
         public void RenderToggle()
         {
             isRendering = true;

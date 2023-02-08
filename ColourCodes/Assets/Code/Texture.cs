@@ -59,7 +59,17 @@ namespace Evernorth.ColourCodes
             }
 
             texture.Apply();
+
+            Save_Texture2D(texture, @"F:\Unity Projects\Image Output\out.png");
+
+
             return texture;
+        }
+
+        void Save_Texture2D(in Texture2D tex, string path)
+        {
+            byte[] bytes = tex.EncodeToPNG();
+            System.IO.File.WriteAllBytes(path, bytes);
         }
     }
 }
