@@ -8,6 +8,7 @@ Symmetric key cypher utilizing 3D arrays to encrypt to colour values.
 ./Sample Videos/
 Contains three videos:
 
-	-Small length video shows the text encrypted to colour values, rendered then decrypted.
-	-Long length shows large text encrypted then decrypted.
-	-Build 0.1.2 shows superior speed in built version.
+	-Small Length With Rendering.mp4 video shows the text encrypted to colour values, rendered then decrypted.
+	-Long Length No Rendering.mp4 shows large text encrypted then decrypted.
+	-Build 0.1.2_LargeFile.mp4 shows superior speed in built version.
+	-CreateTexture.mp4 shows writing data to pixels in a texture ready for reading and decrypting. 
