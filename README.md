@@ -1,7 +1,9 @@
 # evernorth-color-codes
 Copyright 2023 Evernorth Software & Entertainment
 
-It does things and stuff.
+Symmetric key cypher utilizing 3D arrays to encrypt to colour values.
+
+	It does things and stuff.
 
 ./Sample Videos/
 Contains three videos:
