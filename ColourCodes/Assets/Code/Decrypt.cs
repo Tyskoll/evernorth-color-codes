@@ -10,24 +10,32 @@ namespace Evernorth.ColourCodes
     public class Decrypt
     {
         public Dictionary<Vector3Int, char> ColorToCharKey;
+        public Dictionary<char, Vector3Int> CharToColorKey;
 
         public Vector3Int[] colArray;
+        public string eStringData;
+        public Vector3Int[] newColArray;
         public string outputText;
+
+        public int dataLengthTotal;
 
         Vector3Int colV = new Vector3Int(0, 0, 0);
         char c = '\u0000';
 
-        public int dataPos;
+        public int dataPos1 = 0;
+        public int dataPos2 = 0;
         public bool isDecrypting;
         public bool isDecrypted;
+        public bool isString;
 
         public string outString;
 
         public Vector3Int[] cArray;
 
-        public Decrypt(Dictionary<Vector3Int, char> colorToCharKey)
+        public Decrypt(Dictionary<Vector3Int, char> colorToCharKey, Dictionary<char, Vector3Int> charToColorKey)
         {
-            this.ColorToCharKey = colorToCharKey;      
+            this.ColorToCharKey = colorToCharKey;
+            this.CharToColorKey = charToColorKey;
         }
 
         // Receive Vector3Int array and assign values to dataStream[]
@@ -38,29 +46,98 @@ namespace Evernorth.ColourCodes
             colArray = dStream;
         }
 
+        public void ReceiveSData(string sDStream)
+        {
+            eStringData = sDStream;
+        }
+
         public void DecryptStart()
         {
-            ColorToString(colArray);
+            if(isString)
+            {
+                dataLengthTotal = eStringData.Length * 2;
+                newColArray = StringToColor(eStringData);
+                ColorToString(newColArray);
+
+            }
+            else if(!isString)
+            {
+                dataLengthTotal = colArray.Length;
+                ColorToString(colArray);
+            }
+            
+            /*for(int i = 0;i < newColArray.Length; i++)
+            {
+                Debug.Log(
+                    $"col: {newColArray[i]}");
+            }*/
+
+            
         }
-        
-        public void ColorToString(Vector3Int[] cArray)
+
+        public Vector3Int[] StringToColor(string eSData)
+        {
+            Debug.Log("called StringToColor");
+            int eSL = eSData.Length;
+            Debug.Log($"eSData Length: {eSL}");
+            string s = "";
+
+            isDecrypting = true;
+
+            Vector3Int[] cArray = new Vector3Int[eSData.Length];
+
+            for (int i = 0; i < eSData.Length; i++)
+            {
+                Vector3Int v = ColorLookup(eSData[i]);
+                cArray[i] += v;
+                dataPos1 += 1;
+
+                if (dataPos1 >= eSData.Length)
+                {
+                    Debug.Log($"End StringToColor");
+                }
+            }
+
+            return cArray;
+            //outputText = s;
+        }
+
+        // Retrieve color from KeyPair dictionary based on char Key provided
+        Vector3Int ColorLookup(char c)
+        {
+            try
+            {
+                CharToColorKey.TryGetValue(c, out colV);
+                return colV;
+            }
+            catch (System.Exception e)
+            {
+                Debug.Log($"colour not found for {c}");
+            }
+
+            return colV;
+        }
+
+
+        public void ColorToString(Vector3Int[] newCArray)
         {
             Debug.Log("called ColorToString");
             string s = "";
 
             isDecrypting = true;
 
-            for (int i = 0; i < cArray.Length; i++)
+            for (int i = 0; i < newCArray.Length; i++)
             {
-                char c = CharLookup(cArray[i]);
+                char c = CharLookup(newCArray[i]);
                 s += c;
-                dataPos += 1;
+                dataPos2 += 1;
 
-                //Debug.Log(
-                //    $"dataPos: {dataPos}\n" +
-                //    $"char:    {c}");
-                
-                if (dataPos >= cArray.Length)
+                /*
+                Debug.Log(
+                    $"dataPos: {dataPos2}\n" +
+                    $"char:    {c}");
+                */
+                if (dataPos2 >= newCArray.Length)
                 {
                     isDecrypting = false;
                     isDecrypted = true;
@@ -90,6 +167,8 @@ namespace Evernorth.ColourCodes
 
             return c;
         }
+
+        
 
         // To-do:
         // Read pixel colour instead of values from array.

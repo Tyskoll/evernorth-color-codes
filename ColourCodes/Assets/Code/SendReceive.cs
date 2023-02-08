@@ -7,6 +7,7 @@ namespace Evernorth.ColourCodes
     public class SendReceive
     {
         public Vector3Int[] dataStream;
+        public string sDataStream;
 
         // Rendering
         public Image colorImage;
@@ -31,7 +32,13 @@ namespace Evernorth.ColourCodes
         // Receive Vector3Int array and assign values to dataStream[]
         public void ReceiveData(Vector3Int[] dStream)
         {
-            dataStream = dStream;       
+            dataStream = dStream;
+            hasData = true;
+        }
+
+        public void ReceiveSData(string sDStream)
+        {
+            sDataStream = sDStream;
             hasData = true;
         }
 

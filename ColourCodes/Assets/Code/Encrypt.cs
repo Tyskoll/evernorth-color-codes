@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace Evernorth.ColourCodes
 {
@@ -8,8 +10,12 @@ namespace Evernorth.ColourCodes
     {
         public char[,,] CharArray3D;
         public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r";
+        public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>?`~ÁÉÚ";
 
         public Dictionary<char, Vector3Int> CharToColorKey;
+        public Dictionary<Vector3Int, char> ColorToCharKey;
+
+        public List<char> UsedChars;
 
         public bool isEncrytped;
 
@@ -18,6 +24,11 @@ namespace Evernorth.ColourCodes
             CharArray3D = new char[255, 255, 255];
             CharToColorKey = new Dictionary<char, Vector3Int>();
             AssignCharColors();
+
+            //step 2
+            ColorToCharKey = new Dictionary<Vector3Int, char>();
+            AssignColorToChars(CharToColorKey);
+
         }
 
         // Generate random Vector3Int for each char in character string
@@ -42,9 +53,6 @@ namespace Evernorth.ColourCodes
                     {
                         CharArray3D[cPos.x, cPos.y, cPos.z] = c;
                         SetCharColorPair(cPos, c);
-
-                        //InstCube(cPos);
-                        //Debug.Log($"Inserted {c} at {cPos.ToString()}");
                     }
                     else
                     {
@@ -60,7 +68,7 @@ namespace Evernorth.ColourCodes
             }
 
             Debug.Log(
-                $"-- Dictionary Key -- \n" +
+                $"-- Dictionary Key1 -- \n" +
                 $"Length: {CharToColorKey.Count}");
         }
 
@@ -107,6 +115,76 @@ namespace Evernorth.ColourCodes
             return cArray;
         }
 
+        public string ColorToString(Vector3Int[] cArray)
+        {
+            Debug.Log($"ColorToString, Length: {cArray.Length}");
+            string s = "";
+
+            for (int i = 0; i < cArray.Length; i++)
+            {
+                char c = CharLookup(cArray[i]);
+                
+                s += c;
+            }
+
+
+            return s;
+        }
+
+        public string Shuffle(string str)
+        {
+            char[] array = str.ToCharArray();
+            System.Random rng = new System.Random();
+            int n = array.Length;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                var value = array[k];
+                array[k] = array[n];
+                array[n] = value;
+            }
+            return new string(array);
+        }
+
+        // Select random char for each Vector3Int in first key
+        public void AssignColorToChars(Dictionary<char, Vector3Int> cArray) //pass the first key to here
+        {
+            UsedChars = new List<char>();
+
+            string randCharacters = Shuffle(charactersE);
+
+            for (int i = 0; i < randCharacters.Length; i++)
+            {
+                Vector3Int v = cArray.ElementAt(i).Value;
+
+                char c = randCharacters[i];
+
+                if (!UsedChars.Contains(c))
+                {
+                    ColorToCharKey.TryAdd(v, c);
+                    UsedChars.Add(c);
+                    /*Debug.Log(
+                        $"Col : {v}\n" +
+                        $"Char: {c}");*/
+                }
+                else
+                {
+                    Debug.Log($"Already used: {c}");
+                }
+            }
+
+            Debug.Log(
+                $"-- Dictionary Key2 -- \n" +
+                $"Length: {ColorToCharKey.Count}");  
+        }
+
+        // Add a KeyValuePair to the step two dictionary
+        public void SetColorCharPair(char c, Vector3Int col)
+        {
+            ColorToCharKey.Add(col, c);
+        }
+
         // Look up a character and get a Vector3Int from the dictionary
         Vector3Int ColorLookup(char c)
         {
@@ -116,9 +194,15 @@ namespace Evernorth.ColourCodes
             return colV;
         }
 
- 
+        char CharLookup(Vector3Int ev3)
+        {
+            char c;
+            ColorToCharKey.TryGetValue(ev3, out c);
 
- 
+            return c;
+        }
+
+
     }
 
 }
