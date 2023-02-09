@@ -43,7 +43,7 @@ namespace Evernorth.ColourCodes
 
                         Color32 newCol = new Color32((byte)colX, (byte)colY, (byte)colZ, (byte)colA);
 
-                        Debug.Log($"x: {bX} y: {bY} col: {newCol}");
+                        //Debug.Log($"x: {bX} y: {bY} col: {newCol}");
                         texture.SetPixel(bX, bY, newCol);
 
                         i++;
@@ -52,7 +52,7 @@ namespace Evernorth.ColourCodes
                     {
                         Color32 newCol = new Color32((byte)0, (byte)0, (byte)0, (byte)255);
 
-                        Debug.Log($"x: {bX} y: {bY} col: {newCol}");
+                        //Debug.Log($"x: {bX} y: {bY} col: {newCol}");
                         texture.SetPixel(bX, bY, newCol);
                     }
                 }

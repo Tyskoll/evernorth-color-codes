@@ -78,10 +78,6 @@ namespace Evernorth.ColourCodes
             // Instantiate new Encrypt and generate KeyValuePairs
             encrypt = new Encrypt();
 
-
-
-
-
             // Swap pairs
             Dictionary<Vector3Int, char> colorToCharKey = SwapKeyPair1();
             Dictionary<char, Vector3Int> charToColorKey = SwapKeyPair2();
@@ -121,15 +117,15 @@ namespace Evernorth.ColourCodes
         #region UI
         public void SetToggles()
         {
-            isString = true;
-            isVector3 = false;
+            isString = false;
+            isVector3 = true;
             isTexturing = false;
             isRendering = false;
 
-            tgl_isString.interactable = true;
+            tgl_isString.interactable = false;
             tgl_isVector3.interactable = true;
-            tgl_isRendering.interactable = false;
-            tgl_isTexturing.interactable = false;
+            tgl_isRendering.interactable = true;
+            tgl_isTexturing.interactable = true;
         }
 
         public void RenderToggle()
@@ -173,25 +169,34 @@ namespace Evernorth.ColourCodes
             if(!hasData && !endOfStream)
             {
                 string s = textInput.text;
-
+                textFileLength.text = $"File Length: {s.Length.ToString("#,#")}";
                 eV3Data = encrypt.StringToColor(s);
+                eStringData = "0";
 
                 if (isString)
                 {
+                    
                     eStringData = encrypt.ColorToString(eV3Data);
+                    Debug.Log(
+                        $"StepTwo: \n" +
+                        $"{eStringData}");
+
+                    textFileLength.text =
+                    $"NoE File Length: {s.Length.ToString("#,#")}\n" +
+                    $"E String Length: {eStringData.Length.ToString("#,#")}";
+                }
+                else
+                {
+                    textFileLength.text =
+                        $"File Length:   {s.Length.ToString("#,#")}\n" +
+                        $"Unique Values: {encrypt.uniqueValueCount.ToString("#,#")}";
                 }
 
 
+                //string es = eStringData;
 
-                textFileLength.text = $"File Length: {s.Length.ToString("#,#")}";
 
-                string es = eStringData;
-
-                /*
-                Debug.Log(
-                    $"StepTwo: \n" +
-                    $"{es}");
-                */
+                
             }
         }
 
@@ -210,7 +215,6 @@ namespace Evernorth.ColourCodes
 
                     Texture2D newTexture = texture.CreateTexture();
 
-                    //imagePixelCode.material.EnableKeyword("_BaseMap");
                     imagePixelCode.material.SetTexture("_BaseMap", newTexture);
                     imagePixelCode.color = Color.white;
                 }

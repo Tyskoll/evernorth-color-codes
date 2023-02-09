@@ -16,7 +16,7 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] colArray;
         public string eStringData;
-        public Vector3Int[] newColArray;
+        public Vector3Int[] sColArray;
         public string outputText;
 
         public int dataLengthTotal;
@@ -58,8 +58,8 @@ namespace Evernorth.ColourCodes
             if(isString)
             {
                 dataLengthTotal = eStringData.Length * 2;
-                newColArray = StringToColor(eStringData);
-                ColorToString(newColArray);
+                sColArray = StringToColor(eStringData);
+                ColorToString(sColArray);
 
             }
             else if(!isString)
@@ -179,22 +179,31 @@ namespace Evernorth.ColourCodes
 
             for (int i = 0; i < cArray.Length; i++)
             {
-                Debug.Log(
+                /*Debug.Log(
                     $"PreShift" +
                     $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
+                */
 
-                if (seedPos >= 7)
+                if (seedPos >= 31)
                     seedPos = 0;
 
-                cArray[i].x -= iSeed[seedPos];
-                cArray[i].y += iSeed[seedPos];
-                cArray[i].z -= iSeed[seedPos];
+                if (cArray[i].x != 0)
+                {
+                    cArray[i].x -= iSeed[seedPos];
+                    seedPos++;
+                    cArray[i].y += iSeed[seedPos];
+                    seedPos++;
+                    cArray[i].z -= iSeed[seedPos];
+                    seedPos++;
+                    seedPos++;
+                }
 
-                seedPos++;
 
+                /*
                 Debug.Log(
                     $"PostShift" +
                     $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
+                */
             }
 
             return cArray;
