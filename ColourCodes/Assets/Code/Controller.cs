@@ -72,11 +72,15 @@ namespace Evernorth.ColourCodes
         void Start()
         {
             SetToggles();
-
+            
 
             Thread thread = Thread.CurrentThread;
             // Instantiate new Encrypt and generate KeyValuePairs
             encrypt = new Encrypt();
+
+
+
+
 
             // Swap pairs
             Dictionary<Vector3Int, char> colorToCharKey = SwapKeyPair1();
@@ -193,6 +197,8 @@ namespace Evernorth.ColourCodes
 
         public void SendData()
         {
+            sendReceive.iSeed = encrypt.iSeed;
+
             if (!isString && !hasData && !endOfStream)
             {
                 if (isTexturing)
@@ -227,6 +233,8 @@ namespace Evernorth.ColourCodes
 
         public void DecryptData()
         {
+            decrypt.iSeed = sendReceive.iSeed;
+
             if (!isString)
             {
                 decrypt.isString = false;

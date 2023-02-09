@@ -9,6 +9,8 @@ namespace Evernorth.ColourCodes
         public Vector3Int[] dataStream;
         public string sDataStream;
 
+        public int[] iSeed;
+
         // Rendering
         public Image colorImage;
         public Color32 charColour;

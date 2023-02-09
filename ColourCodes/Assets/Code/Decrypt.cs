@@ -12,6 +12,8 @@ namespace Evernorth.ColourCodes
         public Dictionary<Vector3Int, char> ColorToCharKey;
         public Dictionary<char, Vector3Int> CharToColorKey;
 
+        public int[] iSeed;
+
         public Vector3Int[] colArray;
         public string eStringData;
         public Vector3Int[] newColArray;
@@ -119,8 +121,10 @@ namespace Evernorth.ColourCodes
         }
 
 
-        public void ColorToString(Vector3Int[] newCArray)
+        public void ColorToString(Vector3Int[] cArray)
         {
+            Vector3Int[] newCArray = Shift(cArray);
+
             Debug.Log("called ColorToString");
             string s = "";
 
@@ -168,7 +172,33 @@ namespace Evernorth.ColourCodes
             return c;
         }
 
-        
+        public Vector3Int[] Shift(Vector3Int[] cArray)
+        {
+            Debug.Log("Shift started");
+            int seedPos = 0;
+
+            for (int i = 0; i < cArray.Length; i++)
+            {
+                Debug.Log(
+                    $"PreShift" +
+                    $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
+
+                if (seedPos >= 7)
+                    seedPos = 0;
+
+                cArray[i].x -= iSeed[seedPos];
+                cArray[i].y += iSeed[seedPos];
+                cArray[i].z -= iSeed[seedPos];
+
+                seedPos++;
+
+                Debug.Log(
+                    $"PostShift" +
+                    $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
+            }
+
+            return cArray;
+        }
 
         // To-do:
         // Read pixel colour instead of values from array.

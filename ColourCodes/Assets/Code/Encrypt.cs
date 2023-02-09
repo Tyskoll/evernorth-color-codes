@@ -12,6 +12,8 @@ namespace Evernorth.ColourCodes
         public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r";
         public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>?`~ÁÉÚ";
 
+        public int[] iSeed;
+
         public Dictionary<char, Vector3Int> CharToColorKey;
         public Dictionary<Vector3Int, char> ColorToCharKey;
 
@@ -21,6 +23,8 @@ namespace Evernorth.ColourCodes
 
         public Encrypt()
         {
+            iSeed = Seed();
+
             CharArray3D = new char[255, 255, 255];
             CharToColorKey = new Dictionary<char, Vector3Int>();
             AssignCharColors();
@@ -41,9 +45,9 @@ namespace Evernorth.ColourCodes
 
             foreach (char c in characters)
             {
-                x = UnityEngine.Random.Range(0, 255);
-                y = UnityEngine.Random.Range(0, 255);
-                z = UnityEngine.Random.Range(0, 255);
+                x = UnityEngine.Random.Range(8, 247);
+                y = UnityEngine.Random.Range(8, 247);
+                z = UnityEngine.Random.Range(8, 247);
 
                 cPos = new Vector3Int(x, y, z);
 
@@ -101,16 +105,13 @@ namespace Evernorth.ColourCodes
             {
                 Vector3Int colV = ColorLookup(s[i]);
                 cArray[i] = colV;
-                /*
-                Debug.Log(
-                    $"Char: {s[i]}\n" +
-                    $"Colr: {colV}"
-                    );
-                */
+   
             }
 
             isEncrytped = true;
-            Debug.Log($"Encryption completed.");
+            Debug.Log($"StringToColor completed.");
+
+            Shift(cArray);
 
             return cArray;
         }
@@ -202,7 +203,51 @@ namespace Evernorth.ColourCodes
             return c;
         }
 
+        public int[] Seed()
+        {
+            int[] seedValue = new int[8];
 
+            for(int i = 0; i < 8; i++)
+            {
+                int d = UnityEngine.Random.Range(0, 9);
+                seedValue[i] = d;
+            }
+            
+
+            return seedValue;
+        }
+
+        
+        public Vector3Int[] Shift(Vector3Int[] cArray)
+        {
+            Debug.Log("Shift started");
+            int seedPos = 0;
+
+            for(int i = 0; i < cArray.Length; i++)
+            {
+                Debug.Log(
+                    $"PreShift" +
+                    $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
+
+                if (seedPos >= 7)
+                    seedPos = 0;
+
+                cArray[i].x += iSeed[seedPos];
+                cArray[i].y -= iSeed[seedPos];
+                cArray[i].z += iSeed[seedPos];
+
+                seedPos++;
+
+                Debug.Log(
+                    $"PostShift" +
+                    $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
+            }
+            
+            return cArray;
+        }
+        
     }
+
+
 
 }
