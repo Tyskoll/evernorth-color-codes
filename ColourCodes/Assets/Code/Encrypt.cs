@@ -13,6 +13,7 @@ namespace Evernorth.ColourCodes
         public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>?`~ÁÉÚá";
 
         public int[] iSeed;
+        public string iSeedTxt;
         public int uniqueValueCount;
 
         public Dictionary<char, Vector3Int> CharToColorKey;
@@ -226,14 +227,28 @@ namespace Evernorth.ColourCodes
 
         public int[] Seed()
         {
-            int[] seedValue = new int[32];
+            int[] seedValue = new int[256];
 
-            for(int i = 0; i < 31; i++)
+            for(int i = 0; i < 255; i++)
             {
                 int d = UnityEngine.Random.Range(0, 10);
                 seedValue[i] = d;
             }
-            
+
+            //iSeed printing
+            string s = "";
+            for (int i = 0; i < seedValue.Length; i++)
+            {
+                s += seedValue[i];
+            }
+
+            iSeed = seedValue;
+            iSeedTxt = s;
+
+            Debug.Log(
+                $"Encrypt Shift started\n" +
+                $"Key: {s}");
+            //end
 
             return seedValue;
         }
@@ -241,10 +256,6 @@ namespace Evernorth.ColourCodes
         
         public Vector3Int[] Shift(Vector3Int[] cArray)
         {
-            Debug.Log(
-                $"Shift started\n" +
-                $"Key: {iSeed.ToString()}");
-
             int seedPos = 0;
 
             for(int i = 0; i < cArray.Length; i++)
@@ -254,7 +265,7 @@ namespace Evernorth.ColourCodes
                     $"PreShift" +
                     $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
                 */
-                if (seedPos >= 31)
+                if (seedPos >= 255)
                     seedPos = 0;
 
                 cArray[i].x += iSeed[seedPos];

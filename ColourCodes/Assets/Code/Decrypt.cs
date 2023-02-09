@@ -174,7 +174,7 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] Shift(Vector3Int[] cArray)
         {
-            Debug.Log("Shift started");
+            Debug.Log("Decrypt Shift started");
             int seedPos = 0;
 
             for (int i = 0; i < cArray.Length; i++)
@@ -184,7 +184,7 @@ namespace Evernorth.ColourCodes
                     $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
                 */
 
-                if (seedPos >= 31)
+                if (seedPos >= 255)
                     seedPos = 0;
 
                 if (cArray[i].x != 0)

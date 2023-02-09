@@ -38,6 +38,7 @@ namespace Evernorth.ColourCodes
         public float ticker;
 
         //UI
+        public TMP_Text textShiftSeed;
         public TMP_InputField textInput;
         public TMP_InputField textOutput;
         public TMP_Text textValidate;
@@ -64,7 +65,7 @@ namespace Evernorth.ColourCodes
 
         public bool isString = true;
         public bool isVector3 = false;
-        public bool isTexturing = false;
+        public bool isTexturing = true;
         public bool isRendering = false;
 
 
@@ -86,6 +87,9 @@ namespace Evernorth.ColourCodes
             decrypt = new Decrypt(colorToCharKey, charToColorKey);
             // Instantiate new SendReceive with image reference
             sendReceive = new SendReceive(imageColorStream);
+
+
+            textShiftSeed.text = encrypt.iSeedTxt;
         }
 
         Dictionary<Vector3Int, char> SwapKeyPair1()
