@@ -9,15 +9,19 @@ namespace Evernorth.ColourCodes
     public class Encrypt
     {
         public char[,,] CharArray3D;
-        public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r\t";
-        public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$%^&*()-_=+[{]}|\\;:'\",./<>?`~ÁÉÚá";
+        public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$£%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r\t";
+        public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$£%^&*()-_=+[{]}|\\;:'\",./<>?`~ÁÉÚá³";
 
         public int[] iSeed;
         public string iSeedTxt;
         public int uniqueValueCount;
 
+        public string vString;
+
         public Dictionary<char, Vector3Int> CharToColorKey;
         public Dictionary<Vector3Int, char> ColorToCharKey;
+
+        public Dictionary<int, char> IntToCharKey;
 
         public List<char> UsedChars;
 
@@ -32,9 +36,10 @@ namespace Evernorth.ColourCodes
             AssignCharColors();
 
             //step 2
-            ColorToCharKey = new Dictionary<Vector3Int, char>();
-            AssignColorToChars(CharToColorKey);
+            //ColorToCharKey = new Dictionary<Vector3Int, char>();
+            //AssignColorToChars(CharToColorKey);
 
+            IntToCharKey = new Dictionary<int, char>();
         }
 
         // Generate random Vector3Int for each char in character string
@@ -289,7 +294,77 @@ namespace Evernorth.ColourCodes
 
             return cArray;
         }
-        
+
+        public string BuildString(Vector3Int[] cArray)
+        {
+            //RESULT PRINTING
+            for (int i = 0; i < cArray.Length; i++)
+            {
+                vString += cArray[i].x.ToString("000");
+                vString += cArray[i].y.ToString("000");
+                vString += cArray[i].z.ToString("000");
+            }
+
+            //END
+
+            return Compress(vString);
+        }
+
+        public string Compress(string s)
+        {
+            string tempString = "";
+            int sPos = 0;
+            int sLength = (int)Math.Ceiling((double)(s.Length / 2));
+
+            Debug.Log(
+                $"s.Length: {s.Length}\n" +
+                $"sLength : {sLength}");
+
+            string randCharacters = Shuffle(charactersE);
+
+            for (int i = 0; i < sLength ; i++)
+            {
+                char c1;
+                if ((sPos / 2) >= sLength)
+                {
+                    c1 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
+                }
+                else
+                {
+                    c1 = s[sPos];
+                }
+
+                sPos++;
+
+                char c2;
+                if ((sPos / 2) >= sLength)
+                {
+                    c2 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
+                }
+                else
+                {
+                    c2 = s[sPos];
+                }
+                
+                sPos++;
+
+                string nS = ""; 
+                nS = nS + $"{c1}{c2}";
+
+                int nI = int.Parse(nS);
+
+                tempString = tempString + randCharacters[nI];
+            }
+
+            vString = tempString;
+
+            Debug.Log(
+                $"RESULT\n" +
+                $"{vString}");
+
+
+            return vString;
+        }
     }
 
 

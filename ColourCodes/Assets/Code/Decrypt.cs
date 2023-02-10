@@ -9,8 +9,11 @@ namespace Evernorth.ColourCodes
 {
     public class Decrypt
     {
+        public SendReceive sendReceive;
+
         public Dictionary<Vector3Int, char> ColorToCharKey;
         public Dictionary<char, Vector3Int> CharToColorKey;
+        public string charactersE;
 
         public int[] iSeed;
 
@@ -18,6 +21,8 @@ namespace Evernorth.ColourCodes
         public string eStringData;
         public Vector3Int[] sColArray;
         public string outputText;
+
+        public string decompString;
 
         public int dataLengthTotal;
 
@@ -34,10 +39,12 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] cArray;
 
-        public Decrypt(Dictionary<Vector3Int, char> colorToCharKey, Dictionary<char, Vector3Int> charToColorKey)
+        public Decrypt(SendReceive sendReceive, Dictionary<Vector3Int, char> colorToCharKey, string charactersE)//Dictionary<char, Vector3Int> charToColorKey)
         {
+            this.sendReceive = sendReceive;
             this.ColorToCharKey = colorToCharKey;
-            this.CharToColorKey = charToColorKey;
+            //this.CharToColorKey = charToColorKey;
+            this.charactersE = charactersE;
         }
 
         // Receive Vector3Int array and assign values to dataStream[]
@@ -58,8 +65,16 @@ namespace Evernorth.ColourCodes
             if(isString)
             {
                 dataLengthTotal = eStringData.Length * 2;
-                sColArray = StringToColor(eStringData);
-                ColorToString(sColArray);
+
+                decompString = Decompress(eStringData);
+                Debug.Log(
+                    $"Decompressed: \n" +
+                    $"{decompString}");
+                //Vector3Int[] rebuiltColArray = new Vector3Int[colArray.Length];
+
+                //sColArray = StringToColor(eStringData);    <-- old
+                
+                //ColorToString(sColArray);
 
             }
             else if(!isString)
@@ -208,6 +223,30 @@ namespace Evernorth.ColourCodes
 
             return cArray;
         }
+
+        public string Decompress(string s)
+        {
+            string tempString = "";
+
+            for(int i = 0; i < s.Length;i++)
+            {
+                int i1 = charactersE.IndexOf(s[i]);
+
+                tempString = tempString + $"{i1}";
+            }
+
+            Debug.Log(
+                $"Decompres:\n" +
+                $"{tempString}");
+
+            return tempString;
+        }
+
+
+
+
+
+
 
         // To-do:
         // Read pixel colour instead of values from array.

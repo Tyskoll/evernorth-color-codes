@@ -81,10 +81,11 @@ namespace Evernorth.ColourCodes
 
             // Swap pairs
             Dictionary<Vector3Int, char> colorToCharKey = SwapKeyPair1();
-            Dictionary<char, Vector3Int> charToColorKey = SwapKeyPair2();
+            //Dictionary<char, Vector3Int> charToColorKey = SwapKeyPair2();
 
             // Instantiate new Decrypt with swapped KeyValuePairs
-            decrypt = new Decrypt(colorToCharKey, charToColorKey);
+            decrypt = new Decrypt(sendReceive, colorToCharKey, encrypt.charactersE);//, charToColorKey);
+
             // Instantiate new SendReceive with image reference
             sendReceive = new SendReceive(imageColorStream);
 
@@ -123,10 +124,10 @@ namespace Evernorth.ColourCodes
         {
             isString = false;
             isVector3 = true;
-            isTexturing = false;
+            isTexturing = true;
             isRendering = false;
 
-            tgl_isString.interactable = false;
+            tgl_isString.interactable = true;
             tgl_isVector3.interactable = true;
             tgl_isRendering.interactable = true;
             tgl_isTexturing.interactable = true;
@@ -179,34 +180,34 @@ namespace Evernorth.ColourCodes
 
                 if (isString)
                 {
-                    
+                    eStringData = encrypt.BuildString(eV3Data);
+                    /*
                     eStringData = encrypt.ColorToString(eV3Data);
                     Debug.Log(
                         $"StepTwo: \n" +
                         $"{eStringData}");
-
+                    */
                     textFileLength.text =
                     $"NoE File Length: {s.Length.ToString("#,#")}\n" +
-                    $"E String Length: {eStringData.Length.ToString("#,#")}";
+                    $"E String Length: {eStringData.Length.ToString("#,#")}" +
+                    $"Unique Values:    {encrypt.uniqueValueCount.ToString("#,#")}";
+
                 }
                 else
                 {
                     textFileLength.text =
-                        $"File Length:   {s.Length.ToString("#,#")}\n" +
-                        $"Unique Values: {encrypt.uniqueValueCount.ToString("#,#")}";
+                        $"File Length:      {s.Length.ToString("#,#")}\n" +
+                        $"Unique Values:    {encrypt.uniqueValueCount.ToString("#,#")}";
                 }
-
-
-                //string es = eStringData;
-
-
-                
             }
         }
 
         public void SendData()
         {
             sendReceive.iSeed = encrypt.iSeed;
+
+//TEST FOR STRIPPED & PADDED FILE
+            textOutput.text = encrypt.vString;
 
             if (!isString && !hasData && !endOfStream)
             {
