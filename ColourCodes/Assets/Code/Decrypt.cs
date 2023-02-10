@@ -161,6 +161,21 @@ namespace Evernorth.ColourCodes
                 {
                     isDecrypting = false;
                     isDecrypted = true;
+
+                    string cAString = "";
+                    //RESULT PRINTING
+                    for (int j = 0; j < cArray.Length; j++)
+                    {
+                        cAString += newCArray[j].x.ToString();
+                        cAString += newCArray[j].y.ToString();
+                        cAString += newCArray[j].z.ToString();
+                    }
+
+                    //END
+                    Debug.Log(
+                        $"PADDED: \n" +
+                        $"{cAString}");
+
                     Debug.Log($"End ColorToString");
                 }
             }
@@ -248,51 +263,66 @@ namespace Evernorth.ColourCodes
             Vector3Int[] tempV3 = new Vector3Int[s.Length / 9];
 
             int sPos = 0;
-            int sLength = (int)Math.Ceiling((double)(s.Length / 9));
+            int sLength = (int)Math.Ceiling(((decimal)s.Length / 9));
 
-            //Debug.Log(
-            //    $"s.Length: {s.Length}\n" +
-            //    $"sLength : {sLength}");
+            Debug.Log(
+                $"s.Length: {s.Length}\n" +
+                $"sLength : {sLength}");
 
             for (int i = 0; i < sLength; i++)
             {
                 int i1;
-                if ((sPos / 3) >= sLength)
+                /*if ((sPos / 3) >= sLength)
                 {
                     i1 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
                 }
                 else
                 {
-                    i1 = s[sPos];
-                }
-
+                    
+                }*/
+                i1 = s[sPos];
                 sPos++;
 
                 int i2;
+                /*
                 if ((sPos / 3) >= sLength)
                 {
                     i2 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
                 }
                 else
                 {
-                    i2 = s[sPos];
+                    
                 }
-
+                */
+                i2 = s[sPos];
                 sPos++;
 
                 int i3;
+                /*
                 if ((sPos / 3) >= sLength)
                 {
                     i3 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
                 }
                 else
                 {
-                    i3 = s[sPos];
+                    
                 }
-
+                */
+                i3 = s[sPos];
                 sPos++;
 
-                tempV3[i] = new Vector3Int(i1, i2, i3);
+                try
+                {
+                    if (i < tempV3.Length)
+                        tempV3[i] = new Vector3Int(i1, i2, i3);
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError(
+                        $"Outside bounds\n" +
+                        $"Length: {tempV3.Length} Pos:{i}");
+                }
+
             }
 
             return tempV3;

@@ -324,7 +324,7 @@ namespace Evernorth.ColourCodes
         {
             string tempString = "";
             int sPos = 0;
-            int sLength = (int)Math.Ceiling((double)(s.Length / 2));
+            int sLength = (int)Math.Ceiling((decimal)(s.Length / 2));
 
             //Debug.Log(
             //    $"s.Length: {s.Length}\n" +

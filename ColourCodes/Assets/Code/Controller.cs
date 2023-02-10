@@ -194,7 +194,7 @@ namespace Evernorth.ColourCodes
                     */
                     textFileLength.text =
                     $"NoE File Length: {s.Length.ToString("#,#")}\n" +
-                    $"E String Length: {eStringData.Length.ToString("#,#")}" +
+                    $"E String Length: {eStringData.Length.ToString("#,#")}\n" +
                     $"Unique Values:    {encrypt.uniqueValueCount.ToString("#,#")}";
 
                 }
