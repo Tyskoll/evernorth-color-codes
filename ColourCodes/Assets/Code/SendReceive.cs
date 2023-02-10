@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Evernorth.ColourCodes
 {
-    public class SendReceive
+    public class IOServer
     {
         public Vector3Int[] dataStream;
         public string sDataStream;
@@ -26,7 +26,7 @@ namespace Evernorth.ColourCodes
 
         public float ticker = 0.0f;
 
-        public SendReceive(Image colourImage)
+        public IOServer(Image colourImage)
         {
             this.colorImage = colourImage;
         }

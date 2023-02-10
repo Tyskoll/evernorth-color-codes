@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading;
 using System;
+using UnityEngine.TextCore.Text;
 
 namespace Evernorth.ColourCodes
 {
@@ -13,7 +14,7 @@ namespace Evernorth.ColourCodes
         //Classes
         public Encrypt encrypt;
         public Decrypt decrypt;
-        public SendReceive sendReceive;
+        public IOServer sendReceive;
         public Texture texture;
 
         Vector3Int[] eV3Data;
@@ -83,14 +84,18 @@ namespace Evernorth.ColourCodes
             Dictionary<Vector3Int, char> colorToCharKey = SwapKeyPair1();
             //Dictionary<char, Vector3Int> charToColorKey = SwapKeyPair2();
 
-            // Instantiate new Decrypt with swapped KeyValuePairs
-            decrypt = new Decrypt(sendReceive, colorToCharKey, encrypt.charactersE);//, charToColorKey);
+            // Instantiate new Decrypt with IOServer reference, swapped KeyValuePairs and shuffled key
+            decrypt = new Decrypt(sendReceive, colorToCharKey, encrypt.charactersS);//, charToColorKey);
 
             // Instantiate new SendReceive with image reference
-            sendReceive = new SendReceive(imageColorStream);
+            sendReceive = new IOServer(imageColorStream);
 
 
             textShiftSeed.text = encrypt.iSeedTxt;
+
+            Debug.Log(
+                $"e: {encrypt.charactersS}\n" +
+                $"d: {decrypt.charactersS}");
         }
 
         Dictionary<Vector3Int, char> SwapKeyPair1()
@@ -176,11 +181,11 @@ namespace Evernorth.ColourCodes
                 string s = textInput.text;
                 textFileLength.text = $"File Length: {s.Length.ToString("#,#")}";
                 eV3Data = encrypt.StringToColor(s);
-                eStringData = "0";
 
                 if (isString)
                 {
-                    eStringData = encrypt.BuildString(eV3Data);
+                    encrypt.BuildString(eV3Data);
+                    eStringData = encrypt.Compress(encrypt.vString);
                     /*
                     eStringData = encrypt.ColorToString(eV3Data);
                     Debug.Log(
@@ -235,6 +240,7 @@ namespace Evernorth.ColourCodes
             if (isString && !hasData && !endOfStream)
             {
                 sendReceive.ReceiveSData(eStringData);
+                
                 sentData = true;
                 textOutput.text = eStringData;
             }
@@ -341,7 +347,7 @@ namespace Evernorth.ColourCodes
                 btn_decrypt.interactable = true;
 
                 sendReceive.endOfStream = true;
-                Debug.Log("-- End of Stream --");
+                //Debug.Log("-- End of Stream --");
             }
 
 
@@ -362,7 +368,7 @@ namespace Evernorth.ColourCodes
                 //if (decrypt.colArray != null)
                     endValue = decrypt.dataLengthTotal;
 
-                Debug.Log($"EndValue: {endValue}");
+                //Debug.Log($"EndValue: {endValue}");
 
                 while (value <= endValue)
                 {

@@ -12,6 +12,8 @@ namespace Evernorth.ColourCodes
         public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$£%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r\t";
         public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$£%^&*()-_=+[{]}|\\;:'\",./<>?`~ÁÉÚá³";
 
+        public string charactersS;
+
         public int[] iSeed;
         public string iSeedTxt;
         public int uniqueValueCount;
@@ -34,6 +36,8 @@ namespace Evernorth.ColourCodes
             CharArray3D = new char[255, 255, 255];
             CharToColorKey = new Dictionary<char, Vector3Int>();
             AssignCharColors();
+
+            charactersS = Shuffle(charactersE);
 
             //step 2
             //ColorToCharKey = new Dictionary<Vector3Int, char>();
@@ -178,6 +182,7 @@ namespace Evernorth.ColourCodes
             return new string(array);
         }
 
+        /*
         // Select random char for each Vector3Int in first key
         public void AssignColorToChars(Dictionary<char, Vector3Int> cArray) //pass the first key to here
         {
@@ -206,12 +211,15 @@ namespace Evernorth.ColourCodes
                 $"-- Dictionary Key2 -- \n" +
                 $"Length: {ColorToCharKey.Count}");  
         }
+        */
 
+        /*
         // Add a KeyValuePair to the step two dictionary
         public void SetColorCharPair(char c, Vector3Int col)
         {
             ColorToCharKey.Add(col, c);
         }
+        */
 
         // Look up a character and get a Vector3Int from the dictionary
         Vector3Int ColorLookup(char c)
@@ -290,12 +298,12 @@ namespace Evernorth.ColourCodes
 
             uniqueValueCount = cArray.Distinct().Count();
 
-            Debug.Log($"Unique Vector3Int count: {uniqueValueCount}");
+            //Debug.Log($"Unique Vector3Int count: {uniqueValueCount}");
 
             return cArray;
         }
 
-        public string BuildString(Vector3Int[] cArray)
+        public void BuildString(Vector3Int[] cArray)
         {
             //RESULT PRINTING
             for (int i = 0; i < cArray.Length; i++)
@@ -307,7 +315,9 @@ namespace Evernorth.ColourCodes
 
             //END
 
-            return Compress(vString);
+            Debug.Log(
+                $"PADDED: \n" +
+                $"{vString}");
         }
 
         public string Compress(string s)
@@ -316,11 +326,9 @@ namespace Evernorth.ColourCodes
             int sPos = 0;
             int sLength = (int)Math.Ceiling((double)(s.Length / 2));
 
-            Debug.Log(
-                $"s.Length: {s.Length}\n" +
-                $"sLength : {sLength}");
-
-            string randCharacters = Shuffle(charactersE);
+            //Debug.Log(
+            //    $"s.Length: {s.Length}\n" +
+            //    $"sLength : {sLength}");
 
             for (int i = 0; i < sLength ; i++)
             {
@@ -353,14 +361,14 @@ namespace Evernorth.ColourCodes
 
                 int nI = int.Parse(nS);
 
-                tempString = tempString + randCharacters[nI];
+                tempString = tempString + charactersS[nI];
             }
 
             vString = tempString;
 
-            Debug.Log(
-                $"RESULT\n" +
-                $"{vString}");
+            //Debug.Log(
+            //    $"RESULT\n" +
+            //    $"{vString}");
 
 
             return vString;

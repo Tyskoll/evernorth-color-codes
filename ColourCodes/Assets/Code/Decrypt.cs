@@ -9,11 +9,11 @@ namespace Evernorth.ColourCodes
 {
     public class Decrypt
     {
-        public SendReceive sendReceive;
+        public IOServer sendReceive;
 
         public Dictionary<Vector3Int, char> ColorToCharKey;
         public Dictionary<char, Vector3Int> CharToColorKey;
-        public string charactersE;
+        public string charactersS;
 
         public int[] iSeed;
 
@@ -39,12 +39,12 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] cArray;
 
-        public Decrypt(SendReceive sendReceive, Dictionary<Vector3Int, char> colorToCharKey, string charactersE)//Dictionary<char, Vector3Int> charToColorKey)
+        public Decrypt(IOServer sendReceive, Dictionary<Vector3Int, char> colorToCharKey, string charactersE)//Dictionary<char, Vector3Int> charToColorKey)
         {
             this.sendReceive = sendReceive;
             this.ColorToCharKey = colorToCharKey;
             //this.CharToColorKey = charToColorKey;
-            this.charactersE = charactersE;
+            this.charactersS = charactersE;
         }
 
         // Receive Vector3Int array and assign values to dataStream[]
@@ -67,14 +67,15 @@ namespace Evernorth.ColourCodes
                 dataLengthTotal = eStringData.Length * 2;
 
                 decompString = Decompress(eStringData);
-                Debug.Log(
-                    $"Decompressed: \n" +
-                    $"{decompString}");
+
+
                 //Vector3Int[] rebuiltColArray = new Vector3Int[colArray.Length];
 
                 //sColArray = StringToColor(eStringData);    <-- old
-                
-                //ColorToString(sColArray);
+
+                sColArray = Vector3Builder(decompString);
+
+                ColorToString(sColArray);
 
             }
             else if(!isString)
@@ -230,19 +231,72 @@ namespace Evernorth.ColourCodes
 
             for(int i = 0; i < s.Length;i++)
             {
-                int i1 = charactersE.IndexOf(s[i]);
+                int i1 = charactersS.IndexOf(s[i]);
 
-                tempString = tempString + $"{i1}";
+                tempString = tempString + $"{i1.ToString("00")}";
             }
 
             Debug.Log(
-                $"Decompres:\n" +
+                $"Decompressed:\n" +
                 $"{tempString}");
 
             return tempString;
         }
 
+        public Vector3Int[] Vector3Builder(string s)
+        {
+            Vector3Int[] tempV3 = new Vector3Int[s.Length / 9];
 
+            int sPos = 0;
+            int sLength = (int)Math.Ceiling((double)(s.Length / 9));
+
+            //Debug.Log(
+            //    $"s.Length: {s.Length}\n" +
+            //    $"sLength : {sLength}");
+
+            for (int i = 0; i < sLength; i++)
+            {
+                int i1;
+                if ((sPos / 3) >= sLength)
+                {
+                    i1 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
+                }
+                else
+                {
+                    i1 = s[sPos];
+                }
+
+                sPos++;
+
+                int i2;
+                if ((sPos / 3) >= sLength)
+                {
+                    i2 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
+                }
+                else
+                {
+                    i2 = s[sPos];
+                }
+
+                sPos++;
+
+                int i3;
+                if ((sPos / 3) >= sLength)
+                {
+                    i3 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
+                }
+                else
+                {
+                    i3 = s[sPos];
+                }
+
+                sPos++;
+
+                tempV3[i] = new Vector3Int(i1, i2, i3);
+            }
+
+            return tempV3;
+        }
 
 
 
