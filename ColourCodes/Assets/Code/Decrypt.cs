@@ -148,6 +148,7 @@ namespace Evernorth.ColourCodes
 
             for (int i = 0; i < newCArray.Length; i++)
             {
+                //Definitely 
                 char c = CharLookup(newCArray[i]);
                 s += c;
                 dataPos2 += 1;
@@ -162,23 +163,27 @@ namespace Evernorth.ColourCodes
                     isDecrypting = false;
                     isDecrypted = true;
 
-                    string cAString = "";
-                    //RESULT PRINTING
-                    for (int j = 0; j < cArray.Length; j++)
-                    {
-                        cAString += newCArray[j].x.ToString();
-                        cAString += newCArray[j].y.ToString();
-                        cAString += newCArray[j].z.ToString();
-                    }
-
-                    //END
-                    Debug.Log(
-                        $"PADDED: \n" +
-                        $"{cAString}");
-
                     Debug.Log($"End ColorToString");
                 }
             }
+
+            //Debug.Log($"{s}");
+
+            //RESULT PRINTING
+            /*string cAString = "";
+
+            for (int j = 0; j < cArray.Length; j++)
+            {
+                cAString = cAString + $"{newCArray[j].x.ToString()}";
+                cAString = cAString + $"{newCArray[j].y.ToString()}";
+                cAString = cAString + $"{newCArray[j].z.ToString()}";
+            }
+
+            Debug.Log(
+                $"PADDED: \n" +
+                $"{cAString}");
+            */
+            //END
 
             outputText = s;
         }
@@ -260,14 +265,16 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] Vector3Builder(string s)
         {
-            Vector3Int[] tempV3 = new Vector3Int[s.Length / 9];
+            Vector3Int[] tempV3 = new Vector3Int[s.Length / 3];
 
             int sPos = 0;
-            int sLength = (int)Math.Ceiling(((decimal)s.Length / 9));
+            int sLength = (int)Math.Ceiling(((decimal)s.Length / 3));
 
             Debug.Log(
                 $"s.Length: {s.Length}\n" +
                 $"sLength : {sLength}");
+
+            Debug.Log($"{s}"); //still good here
 
             for (int i = 0; i < sLength; i++)
             {
@@ -280,7 +287,7 @@ namespace Evernorth.ColourCodes
                 {
                     
                 }*/
-                i1 = s[sPos];
+                i1 = int.Parse(s[sPos].ToString());
                 sPos++;
 
                 int i2;
@@ -294,7 +301,7 @@ namespace Evernorth.ColourCodes
                     
                 }
                 */
-                i2 = s[sPos];
+                i2 = int.Parse(s[sPos].ToString());
                 sPos++;
 
                 int i3;
@@ -308,7 +315,7 @@ namespace Evernorth.ColourCodes
                     
                 }
                 */
-                i3 = s[sPos];
+                i3 = int.Parse(s[sPos].ToString());
                 sPos++;
 
                 try

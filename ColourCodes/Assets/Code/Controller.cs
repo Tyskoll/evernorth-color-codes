@@ -233,8 +233,6 @@ namespace Evernorth.ColourCodes
                     sendReceive.ReceiveData(eV3Data);
                     sentData = true;
                 }
-                
-                
             }
 
             if (isString && !hasData && !endOfStream)
