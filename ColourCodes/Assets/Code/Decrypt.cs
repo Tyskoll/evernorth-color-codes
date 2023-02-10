@@ -142,6 +142,23 @@ namespace Evernorth.ColourCodes
             Vector3Int[] newCArray = Shift(cArray);
 
             Debug.Log("called ColorToString");
+
+            //RESULT PRINTING
+            string cAString = "";
+
+            for (int j = 0; j < cArray.Length; j++)
+            {
+                cAString = cAString + $"{cArray[j].x.ToString()}";
+                cAString = cAString + $"{cArray[j].y.ToString()}";
+                cAString = cAString + $"{cArray[j].z.ToString()}";
+            }
+
+            Debug.Log(
+                $"PADDED: \n" +
+                $"{cAString}");
+            
+            //END
+
             string s = "";
 
             isDecrypting = true;
@@ -169,21 +186,7 @@ namespace Evernorth.ColourCodes
 
             //Debug.Log($"{s}");
 
-            //RESULT PRINTING
-            /*string cAString = "";
-
-            for (int j = 0; j < cArray.Length; j++)
-            {
-                cAString = cAString + $"{newCArray[j].x.ToString()}";
-                cAString = cAString + $"{newCArray[j].y.ToString()}";
-                cAString = cAString + $"{newCArray[j].z.ToString()}";
-            }
-
-            Debug.Log(
-                $"PADDED: \n" +
-                $"{cAString}");
-            */
-            //END
+            
 
             outputText = s;
         }
@@ -234,7 +237,6 @@ namespace Evernorth.ColourCodes
                     seedPos++;
                 }
 
-
                 /*
                 Debug.Log(
                     $"PostShift" +
@@ -278,58 +280,67 @@ namespace Evernorth.ColourCodes
 
             for (int i = 0; i < sLength; i++)
             {
-                int i1;
-                /*if ((sPos / 3) >= sLength)
+                if(sPos < s.Length)
                 {
-                    i1 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
-                }
-                else
-                {
-                    
-                }*/
-                i1 = int.Parse(s[sPos].ToString());
-                sPos++;
+                    string iS1;
+                    string iS2;
+                    string iS3;
 
-                int i2;
-                /*
-                if ((sPos / 3) >= sLength)
-                {
-                    i2 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
-                }
-                else
-                {
-                    
-                }
-                */
-                i2 = int.Parse(s[sPos].ToString());
-                sPos++;
+                    string c1 = s[sPos].ToString();
+                    sPos++;
+                    string c2 = s[sPos].ToString();
+                    sPos++;
+                    string c3 = s[sPos].ToString();
+                    sPos++;
 
-                int i3;
-                /*
-                if ((sPos / 3) >= sLength)
-                {
-                    i3 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
-                }
-                else
-                {
-                    
-                }
-                */
-                i3 = int.Parse(s[sPos].ToString());
-                sPos++;
+                    iS1 = $"{c1}{c2}{c3}";
 
-                try
-                {
-                    if (i < tempV3.Length)
-                        tempV3[i] = new Vector3Int(i1, i2, i3);
-                }
-                catch(Exception e)
-                {
-                    Debug.LogError(
-                        $"Outside bounds\n" +
-                        $"Length: {tempV3.Length} Pos:{i}");
-                }
+                    string c4 = s[sPos].ToString();
+                    sPos++;
+                    string c5 = s[sPos].ToString();
+                    sPos++;
+                    string c6 = s[sPos].ToString();
+                    sPos++;
 
+                    iS2 = $"{c4}{c5}{c6}";
+
+                    string c7 = s[sPos].ToString();
+                    sPos++;
+                    string c8 = s[sPos].ToString();
+                    sPos++;
+
+                    //attempt fix - fails
+                    string c9 = "";
+                    if (sPos < s.Length)
+                    {
+                        c9 = s[sPos].ToString();
+                        sPos++;
+                    }
+                    else
+                    {
+                        c9 = "0";
+                    }
+                    //attempt fix end
+
+                    iS3 = $"{c7}{c8}{c9}";
+
+                    int i1 = int.Parse(iS1.ToString());
+                    int i2 = int.Parse(iS2.ToString());
+                    int i3 = int.Parse(iS3.ToString());
+
+                    try
+                    {
+                        if (i < tempV3.Length)
+                            tempV3[i] = new Vector3Int(i1, i2, i3);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(
+                            $"Outside bounds\n" +
+                            $"Length: {tempV3.Length} Pos:{i}");
+                    }
+                }
+                
             }
 
             return tempV3;
