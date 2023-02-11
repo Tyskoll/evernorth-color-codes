@@ -10,7 +10,7 @@ namespace Evernorth.ColourCodes
 {
     public class Decrypt
     {
-        public IOServer sendReceive;
+        public IOServer ioServer;
 
         public Dictionary<Vector3Int, char> ColorToCharKey;
         public Dictionary<char, Vector3Int> CharToColorKey;
@@ -40,9 +40,9 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] cArray;
 
-        public Decrypt(IOServer sendReceive, Dictionary<Vector3Int, char> colorToCharKey, string charactersE)//Dictionary<char, Vector3Int> charToColorKey)
+        public Decrypt(IOServer ioServer, Dictionary<Vector3Int, char> colorToCharKey, string charactersE)//Dictionary<char, Vector3Int> charToColorKey)
         {
-            this.sendReceive = sendReceive;
+            this.ioServer = ioServer;
             this.ColorToCharKey = colorToCharKey;
             //this.CharToColorKey = charToColorKey;
             this.charactersS = charactersE;

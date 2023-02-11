@@ -14,7 +14,7 @@ namespace Evernorth.ColourCodes
         //Classes
         public Encrypt encrypt;
         public Decrypt decrypt;
-        public IOServer sendReceive;
+        public IOServer ioServer;
         public Texture texture;
 
         Vector3Int[] eV3Data;
@@ -85,10 +85,10 @@ namespace Evernorth.ColourCodes
             //Dictionary<char, Vector3Int> charToColorKey = SwapKeyPair2();
 
             // Instantiate new Decrypt with IOServer reference, swapped KeyValuePairs and shuffled key
-            decrypt = new Decrypt(sendReceive, colorToCharKey, encrypt.charactersS);//, charToColorKey);
+            decrypt = new Decrypt(ioServer, colorToCharKey, encrypt.charactersS);//, charToColorKey);
 
-            // Instantiate new SendReceive with image reference
-            sendReceive = new IOServer(imageColorStream);
+            // Instantiate new ioServer with image reference
+            ioServer = new IOServer(imageColorStream);
 
 
             textShiftSeed.text = encrypt.iSeedTxt;
@@ -209,7 +209,7 @@ namespace Evernorth.ColourCodes
 
         public void SendData()
         {
-            sendReceive.iSeed = encrypt.iSeed;
+            ioServer.iSeed = encrypt.iSeed;
 
 //TEST FOR STRIPPED & PADDED FILE
             textOutput.text = encrypt.vString;
@@ -219,8 +219,8 @@ namespace Evernorth.ColourCodes
                 if (isTexturing)
                 {
                     Debug.Log("isTexturing");
-                    sendReceive.ReceiveData(eV3Data);
-                    texture = new Texture(imagePixelCode, sendReceive.dataStream);
+                    ioServer.ReceiveData(eV3Data);
+                    texture = new Texture(imagePixelCode, ioServer.dataStream);
                     sentData = true;
 
                     Texture2D newTexture = texture.CreateTexture();
@@ -230,14 +230,14 @@ namespace Evernorth.ColourCodes
                 }
                 else
                 {
-                    sendReceive.ReceiveData(eV3Data);
+                    ioServer.ReceiveData(eV3Data);
                     sentData = true;
                 }
             }
 
             if (isString && !hasData && !endOfStream)
             {
-                sendReceive.ReceiveSData(eStringData);
+                ioServer.ReceiveSData(eStringData);
                 
                 sentData = true;
                 textOutput.text = eStringData;
@@ -246,18 +246,18 @@ namespace Evernorth.ColourCodes
 
         public void DecryptData()
         {
-            decrypt.iSeed = sendReceive.iSeed;
+            decrypt.iSeed = ioServer.iSeed;
 
             if (!isString)
             {
                 decrypt.isString = false;
-                decrypt.ReceiveData(sendReceive.dataStream);
+                decrypt.ReceiveData(ioServer.dataStream);
             }
 
             if (isString)
             {
                 decrypt.isString = true;
-                decrypt.ReceiveSData(sendReceive.sDataStream);
+                decrypt.ReceiveSData(ioServer.sDataStream);
             }
 
 
@@ -296,12 +296,12 @@ namespace Evernorth.ColourCodes
         // Update is called once per frame
         void Update()
         {
-            ticker = sendReceive.ticker;
+            ticker = ioServer.ticker;
             isEncrypted = encrypt.isEncrytped;
-            bCasting = sendReceive.bCasting;
-            hasData = sendReceive.hasData;
-            endOfStream = sendReceive.endOfStream;
-            currentColor = sendReceive.colorOut;
+            bCasting = ioServer.bCasting;
+            hasData = ioServer.hasData;
+            endOfStream = ioServer.endOfStream;
+            currentColor = ioServer.colorOut;
             isDecrypting = decrypt.isDecrypting;
             isDecrypted = decrypt.isDecrypted;
 
@@ -337,14 +337,14 @@ namespace Evernorth.ColourCodes
 
             if (isRendering && sentData && !endOfStream)
             {
-                sendReceive.Update();
+                ioServer.Update();
             }
             else if (!isRendering && sentData && !endOfStream && hasData)
             {
                 btn_send.interactable = false;
                 btn_decrypt.interactable = true;
 
-                sendReceive.endOfStream = true;
+                ioServer.endOfStream = true;
                 //Debug.Log("-- End of Stream --");
             }
 
