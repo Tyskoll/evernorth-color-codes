@@ -116,10 +116,11 @@ namespace Evernorth.ColourCodes
                 }
 
             }
-
+            /*
             Debug.Log(
                 $"-- Dictionary Key1 -- \n" +
                 $"Length: {CharToColorKey.Count}");
+            */
         }
 
         // Cheeck if the index position is empty
@@ -155,7 +156,7 @@ namespace Evernorth.ColourCodes
             }
 
             isEncrytped = true;
-            Debug.Log($"StringToColor completed.");
+            //Debug.Log($"StringToColor completed.");
 
             Shift(cArray);
 
@@ -164,7 +165,7 @@ namespace Evernorth.ColourCodes
 
         public string ColorToString(Vector3Int[] nCArray)
         {
-            Debug.Log($"ColorToString, Length: {nCArray.Length}");
+            //Debug.Log($"ColorToString, Length: {nCArray.Length}");
             string s = "";
 
             int seedPos = 0;
@@ -173,10 +174,12 @@ namespace Evernorth.ColourCodes
             {
                 if (seedPos >= 8)
                     seedPos = 0;
-
+                
+                /*
                 Debug.Log(
                     $"PreShift" +
                     $"\nx: {nCArray[i].x} y: {nCArray[i].y} z: {nCArray[i].z}");
+                */
 
                 int x = nCArray[i].x -= iSeed[seedPos];
                 seedPos++;
@@ -293,10 +296,12 @@ namespace Evernorth.ColourCodes
             iSeed = seedValue;
             iSeedTxt = s;
 
+            /*
             Debug.Log(
                 $"Encrypt Shift started\n" +
                 $"Key: {s}");
             //end
+            */
 
             return seedValue;
         }
@@ -341,22 +346,33 @@ namespace Evernorth.ColourCodes
         public void BuildString(Vector3Int[] cArray)
         {
             //RESULT PRINTING
+            Debug.Log("Padding 000");
+
+            string tempString = "";
+
             for (int i = 0; i < cArray.Length; i++)
             {
-                vString += cArray[i].x.ToString("000");
-                vString += cArray[i].y.ToString("000");
-                vString += cArray[i].z.ToString("000");
+                string c1 = cArray[i].x.ToString("000");
+                string c2 =  cArray[i].y.ToString("000");
+                string c3 = cArray[i].z.ToString("000");
+
+                tempString = tempString + $"{c1}{c2}{c3}";
             }
 
-            //END
+            vString = tempString;
 
+            Debug.Log("End Padding");
+            //END
+            /*
             Debug.Log(
                 $"PADDED: \n" +
                 $"{vString}");
+            */
         }
 
         public string EncodeToChar(string s)
         {
+            Debug.Log("EncodeToChar");
             string tempString = "";
             int sPos = 0;
             int sLength = (int)Math.Ceiling((decimal)(s.Length / 3));
@@ -364,7 +380,7 @@ namespace Evernorth.ColourCodes
             //Debug.Log(
             //    $"s.Length: {s.Length}\n" +
             //    $"sLength : {sLength}");
-
+            
             for (int i = 0; i < sLength ; i++)
             {
                 char c1;
@@ -386,13 +402,28 @@ namespace Evernorth.ColourCodes
 
                 tempString = tempString + charactersS[nI];
             }
+            
+            /*
+            for (int i = 0; i < sLength; i += 3)
+            {
+                string c1 = s[i].ToString();
+                string c2 = s[i+1].ToString();
+                string c3 = s[i+2].ToString();
 
+                string iS1 = $"{c1}{c2}{c3}";
+
+                int i1 = int.Parse(iS1.ToString());
+                char nC = charactersS[i1];
+
+                tempString = tempString + nC;
+            }
+            */
             vString = tempString;
 
             //Debug.Log(
             //    $"RESULT\n" +
             //    $"{vString}");
-
+            Debug.Log("End EncodeToChar");
 
             return vString;
         }

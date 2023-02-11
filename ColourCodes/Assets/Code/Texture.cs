@@ -21,7 +21,7 @@ namespace Evernorth.ColourCodes
         public Texture2D CreateTexture()
         {
             int sqrScale = (int)Math.Round(Math.Sqrt(dataStream.Length));
-            Debug.Log($"SqrScale: {sqrScale}");
+            //Debug.Log($"SqrScale: {sqrScale}");
             image.rectTransform.sizeDelta = new Vector2(sqrScale, sqrScale);
             texture = new Texture2D(sqrScale, sqrScale, TextureFormat.RGBA32, false);
             texture.filterMode = FilterMode.Point;
@@ -61,7 +61,6 @@ namespace Evernorth.ColourCodes
             texture.Apply();
 
             Save_Texture2D(texture, @"F:\Unity Projects\Image Output\out.png");
-
 
             return texture;
         }

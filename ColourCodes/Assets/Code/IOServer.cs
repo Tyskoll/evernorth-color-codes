@@ -73,7 +73,7 @@ namespace Evernorth.ColourCodes
             {
                 endOfStream = true;
                 bCasting = false;
-                Debug.Log("-- End of Stream --");
+                //Debug.Log("-- End of Stream --");
             }
 
             return nCol;

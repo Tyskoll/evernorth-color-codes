@@ -92,10 +92,11 @@ namespace Evernorth.ColourCodes
 
 
             textShiftSeed.text = encrypt.iSeedTxt;
-
+            /*
             Debug.Log(
                 $"e: {encrypt.charactersS}\n" +
                 $"d: {decrypt.charactersS}");
+            */
         }
 
         Dictionary<Vector3Int, char> SwapKeyPair1()
@@ -218,7 +219,7 @@ namespace Evernorth.ColourCodes
             {
                 if (isTexturing)
                 {
-                    Debug.Log("isTexturing");
+                    //Debug.Log("isTexturing");
                     ioServer.ReceiveData(eV3Data);
                     texture = new Texture(imagePixelCode, ioServer.dataStream);
                     sentData = true;

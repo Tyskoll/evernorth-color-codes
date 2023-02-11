@@ -69,11 +69,6 @@ namespace Evernorth.ColourCodes
 
                 decompString = DecodeFromChar(eStringData);
 
-
-                //Vector3Int[] rebuiltColArray = new Vector3Int[colArray.Length];
-
-                //sColArray = StringToColor(eStringData);    <-- old
-
                 sColArray = Vector3Builder(decompString);
 
                 ColorToString(sColArray);
@@ -96,10 +91,10 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] StringToColor(string eSData)
         {
-            Debug.Log("called StringToColor");
+            //Debug.Log("called StringToColor");
             int eSL = eSData.Length;
-            Debug.Log($"eSData Length: {eSL}");
-            string s = "";
+            //Debug.Log($"eSData Length: {eSL}");
+            //string s = "";
 
             isDecrypting = true;
 
@@ -111,10 +106,12 @@ namespace Evernorth.ColourCodes
                 cArray[i] += v;
                 dataPos1 += 1;
 
+                /*
                 if (dataPos1 >= eSData.Length)
                 {
                     Debug.Log($"End StringToColor");
                 }
+                */
             }
 
             return cArray;
@@ -142,10 +139,10 @@ namespace Evernorth.ColourCodes
         {
             Vector3Int[] newCArray = Shift(cArray);
 
-            Debug.Log("called ColorToString");
+            //Debug.Log("called ColorToString");
 
             //RESULT PRINTING
-            string cAString = "";
+           /* string cAString = "";
 
             string tmp = "";
 
@@ -159,7 +156,7 @@ namespace Evernorth.ColourCodes
             Debug.Log(
                 $"Fin: \n" +
                 $"{cAString}");
-            
+            */
             //END
 
             string s = "";
@@ -183,7 +180,7 @@ namespace Evernorth.ColourCodes
                     isDecrypting = false;
                     isDecrypted = true;
 
-                    Debug.Log($"End ColorToString");
+                    //Debug.Log($"End ColorToString");
                 }
             }
 
@@ -192,7 +189,7 @@ namespace Evernorth.ColourCodes
             
 
             outputText = s;
-            Debug.Log($"{s}");
+            //Debug.Log($"{s}");
         }
 
         // Retrieve char from KeyPair dictionary based on colour Key provided
@@ -217,7 +214,7 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] Shift(Vector3Int[] cArray)
         {
-            Debug.Log("Decrypt Shift started");
+            //Debug.Log("Decrypt Shift started");
             int seedPos = 0;
 
             for (int i = 0; i < cArray.Length; i++)
@@ -261,11 +258,11 @@ namespace Evernorth.ColourCodes
 
                 tempString = tempString + $"{i1.ToString("000")}";
             }
-
+            /*
             Debug.Log(
                 $"Decompressed:\n" +
                 $"{tempString}");
-
+            */
             return tempString;
         }
 
@@ -275,13 +272,13 @@ namespace Evernorth.ColourCodes
 
             int vPos = 0;
             int sLength = (int)Math.Ceiling(((decimal)s.Length / 3));
-
+            /*
             Debug.Log(
                 $"s.Length: {s.Length}\n" +
                 $"sLength : {sLength}");
 
             Debug.Log($"BeforeBuild: \n{s}");
-
+            */
             int vX;
             int vY;
             int vZ;
@@ -317,11 +314,11 @@ namespace Evernorth.ColourCodes
             {
                 tmp = tmp + $"{v3.x}{v3.y}{v3.z}";
             }
-
+            /*
             Debug.Log(
                 $"After Build: \n" +
                 $"{tmp}");
-
+            */
             return tempV3;
         }
 
