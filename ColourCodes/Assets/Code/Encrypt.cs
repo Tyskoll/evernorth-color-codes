@@ -10,7 +10,8 @@ namespace Evernorth.ColourCodes
     {
         public char[,,] CharArray3D;
         public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$£%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r\t";
-        public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$£%^&*()-_=+[{]}|\\;:'\",./<>?`~ÁÉÚá³";
+        public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890™!%^&*<>?¤†×÷‡±¶§«»©®æÆÇ;()ÊËÉÈìÍÌÎÏ.œŒôöòõøÓÔÕØÒšŠûÙÚÛŸýÝžŽªÞþƒßµðÐ¬¿¡¥£€¢¹²³½¼¾¦üéâäàåçêëèïîùÿÖÜáíóúñÑАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ";
+
 
         public string charactersS;
 
@@ -29,8 +30,42 @@ namespace Evernorth.ColourCodes
 
         public bool isEncrytped;
 
+        public void UniqueStringCheck()
+        {
+            CheckUnique(charactersE);
+            //Debug.Log($"Unique: {b}");
+        }
+
+        public void CheckUnique(string str)
+        {
+            string repeated = "";
+            string one = "";
+            string two = "";
+            for (int i = 0; i < str.Length; i++)
+            {
+                one = str.Substring(i, 1);
+                for (int j = 0; j < str.Length; j++)
+                {
+                    two = str.Substring(j, 1);
+                    if ((one == two) && (i != j))
+                    {
+                        repeated = repeated + $"{one}\n";
+                    }
+                        
+                }
+            }
+            /*
+            Debug.Log(
+                $"Length: {str.Length}\n" +
+                $"Not Unique: \n" +
+                $"{repeated}");
+            */
+        }
+
         public Encrypt()
         {
+            UniqueStringCheck();
+
             iSeed = Seed();
 
             CharArray3D = new char[255, 255, 255];
@@ -320,11 +355,11 @@ namespace Evernorth.ColourCodes
                 $"{vString}");
         }
 
-        public string Compress(string s)
+        public string EncodeToChar(string s)
         {
             string tempString = "";
             int sPos = 0;
-            int sLength = (int)Math.Ceiling((decimal)(s.Length / 2));
+            int sLength = (int)Math.Ceiling((decimal)(s.Length / 3));
 
             //Debug.Log(
             //    $"s.Length: {s.Length}\n" +
@@ -333,31 +368,19 @@ namespace Evernorth.ColourCodes
             for (int i = 0; i < sLength ; i++)
             {
                 char c1;
-                if ((sPos / 2) >= sLength)
-                {
-                    c1 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
-                }
-                else
-                {
-                    c1 = s[sPos];
-                }
-
+                c1 = s[sPos];
                 sPos++;
 
                 char c2;
-                if ((sPos / 2) >= sLength)
-                {
-                    c2 = '0'; //This probably fucks things up, may be ok to remove the trailing zero during decrypt
-                }
-                else
-                {
-                    c2 = s[sPos];
-                }
-                
+                c2 = s[sPos];
+                sPos++;
+
+                char c3;
+                c3 = s[sPos];
                 sPos++;
 
                 string nS = ""; 
-                nS = nS + $"{c1}{c2}";
+                nS = nS + $"{c1}{c2}{c3}";
 
                 int nI = int.Parse(nS);
 

@@ -185,7 +185,7 @@ namespace Evernorth.ColourCodes
                 if (isString)
                 {
                     encrypt.BuildString(eV3Data);
-                    eStringData = encrypt.Compress(encrypt.vString);
+                    eStringData = encrypt.EncodeToChar(encrypt.vString);
                     /*
                     eStringData = encrypt.ColorToString(eV3Data);
                     Debug.Log(

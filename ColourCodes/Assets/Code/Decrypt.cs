@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using static UnityEngine.Rendering.VolumeComponent;
 
 namespace Evernorth.ColourCodes
 {
@@ -66,7 +67,7 @@ namespace Evernorth.ColourCodes
             {
                 dataLengthTotal = eStringData.Length * 2;
 
-                decompString = Decompress(eStringData);
+                decompString = DecodeFromChar(eStringData);
 
 
                 //Vector3Int[] rebuiltColArray = new Vector3Int[colArray.Length];
@@ -146,15 +147,17 @@ namespace Evernorth.ColourCodes
             //RESULT PRINTING
             string cAString = "";
 
+            string tmp = "";
+
             for (int j = 0; j < cArray.Length; j++)
             {
-                cAString = cAString + $"{cArray[j].x.ToString()}";
-                cAString = cAString + $"{cArray[j].y.ToString()}";
-                cAString = cAString + $"{cArray[j].z.ToString()}";
+                tmp = $"{cArray[j].x}{cArray[j].y}{cArray[j].z}";
+
+                cAString = cAString + tmp;
             }
 
             Debug.Log(
-                $"PADDED: \n" +
+                $"Fin: \n" +
                 $"{cAString}");
             
             //END
@@ -189,6 +192,7 @@ namespace Evernorth.ColourCodes
             
 
             outputText = s;
+            Debug.Log($"{s}");
         }
 
         // Retrieve char from KeyPair dictionary based on colour Key provided
@@ -247,7 +251,7 @@ namespace Evernorth.ColourCodes
             return cArray;
         }
 
-        public string Decompress(string s)
+        public string DecodeFromChar(string s)
         {
             string tempString = "";
 
@@ -255,7 +259,7 @@ namespace Evernorth.ColourCodes
             {
                 int i1 = charactersS.IndexOf(s[i]);
 
-                tempString = tempString + $"{i1.ToString("00")}";
+                tempString = tempString + $"{i1.ToString("000")}";
             }
 
             Debug.Log(
@@ -267,81 +271,56 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] Vector3Builder(string s)
         {
-            Vector3Int[] tempV3 = new Vector3Int[s.Length / 3];
+            Vector3Int[] tempV3 = new Vector3Int[s.Length / 9];
 
-            int sPos = 0;
+            int vPos = 0;
             int sLength = (int)Math.Ceiling(((decimal)s.Length / 3));
 
             Debug.Log(
                 $"s.Length: {s.Length}\n" +
                 $"sLength : {sLength}");
 
-            Debug.Log($"{s}"); //still good here
+            Debug.Log($"BeforeBuild: \n{s}");
 
-            for (int i = 0; i < sLength; i++)
+            int vX;
+            int vY;
+            int vZ;
+
+            for (int i = 0; i < s.Length; i += 9)
             {
-                if(sPos < s.Length)
-                {
-                    string iS1;
-                    string iS2;
-                    string iS3;
+                string c1 = s[i].ToString();
+                string c2 = s[i+1].ToString();
+                string c3 = s[i+2].ToString();
+                string c4 = s[i+3].ToString();
+                string c5 = s[i+4].ToString();
+                string c6 = s[i+5].ToString();
+                string c7 = s[i+6].ToString();
+                string c8 = s[i+7].ToString();
+                string c9 = s[i+8].ToString();
 
-                    string c1 = s[sPos].ToString();
-                    sPos++;
-                    string c2 = s[sPos].ToString();
-                    sPos++;
-                    string c3 = s[sPos].ToString();
-                    sPos++;
+                string iS1 = $"{c1}{c2}{c3}";
+                string iS2 = $"{c4}{c5}{c6}";
+                string iS3 = $"{c7}{c8}{c9}";
 
-                    iS1 = $"{c1}{c2}{c3}";
+                int i1 = int.Parse(iS1.ToString());
+                int i2 = int.Parse(iS2.ToString());
+                int i3 = int.Parse(iS3.ToString());
 
-                    string c4 = s[sPos].ToString();
-                    sPos++;
-                    string c5 = s[sPos].ToString();
-                    sPos++;
-                    string c6 = s[sPos].ToString();
-                    sPos++;
+                tempV3[vPos] = new Vector3Int(i1,i2,i3);
 
-                    iS2 = $"{c4}{c5}{c6}";
-
-                    string c7 = s[sPos].ToString();
-                    sPos++;
-                    string c8 = s[sPos].ToString();
-                    sPos++;
-
-                    //attempt fix - fails
-                    string c9 = "";
-                    if (sPos < s.Length)
-                    {
-                        c9 = s[sPos].ToString();
-                        sPos++;
-                    }
-                    else
-                    {
-                        c9 = "0";
-                    }
-                    //attempt fix end
-
-                    iS3 = $"{c7}{c8}{c9}";
-
-                    int i1 = int.Parse(iS1.ToString());
-                    int i2 = int.Parse(iS2.ToString());
-                    int i3 = int.Parse(iS3.ToString());
-
-                    try
-                    {
-                        if (i < tempV3.Length)
-                            tempV3[i] = new Vector3Int(i1, i2, i3);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError(
-                            $"Outside bounds\n" +
-                            $"Length: {tempV3.Length} Pos:{i}");
-                    }
-                }
-                
+                vPos++;
             }
+
+            string tmp = "";
+
+            foreach(Vector3Int v3 in tempV3)
+            {
+                tmp = tmp + $"{v3.x}{v3.y}{v3.z}";
+            }
+
+            Debug.Log(
+                $"After Build: \n" +
+                $"{tmp}");
 
             return tempV3;
         }
