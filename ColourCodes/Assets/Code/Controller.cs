@@ -62,7 +62,6 @@ namespace Evernorth.ColourCodes
         public Image sliderFillImage;
 
         private IEnumerator progressBar;
-        private IEnumerator colorToString;
 
         public bool isString = true;
         public bool isVector3 = false;
@@ -76,27 +75,20 @@ namespace Evernorth.ColourCodes
             SetToggles();
             
 
-            Thread thread = Thread.CurrentThread;
+            Thread t1 = Thread.CurrentThread;
             // Instantiate new Encrypt and generate KeyValuePairs
             encrypt = new Encrypt();
 
             // Swap pairs
             Dictionary<Vector3Int, char> colorToCharKey = SwapKeyPair1();
-            //Dictionary<char, Vector3Int> charToColorKey = SwapKeyPair2();
 
             // Instantiate new Decrypt with IOServer reference, swapped KeyValuePairs and shuffled key
-            decrypt = new Decrypt(ioServer, colorToCharKey, encrypt.charactersS);//, charToColorKey);
+            decrypt = new Decrypt(ioServer, colorToCharKey, encrypt.charactersS);
 
             // Instantiate new ioServer with image reference
             ioServer = new IOServer(imageColorStream);
 
-
             textShiftSeed.text = encrypt.iSeedTxt;
-            /*
-            Debug.Log(
-                $"e: {encrypt.charactersS}\n" +
-                $"d: {decrypt.charactersS}");
-            */
         }
 
         Dictionary<Vector3Int, char> SwapKeyPair1()
@@ -110,20 +102,6 @@ namespace Evernorth.ColourCodes
 
             return colorToCharKey;
         }
-
-        Dictionary<char, Vector3Int> SwapKeyPair2()
-        {
-            Dictionary<char, Vector3Int> charToColorKey = new Dictionary<char, Vector3Int>();
-
-            foreach (KeyValuePair<Vector3Int, char> pair in encrypt.ColorToCharKey)
-            {
-                charToColorKey.Add(pair.Value, pair.Key);
-            }
-
-            return charToColorKey;
-        }
-
-
 
         #region UI
         public void SetToggles()
@@ -187,12 +165,6 @@ namespace Evernorth.ColourCodes
                 {
                     eStringData = encrypt.VectorToString(eV3Data);
 
-                    /*
-                    eStringData = encrypt.ColorToString(eV3Data);
-                    Debug.Log(
-                        $"StepTwo: \n" +
-                        $"{eStringData}");
-                    */
                     textFileLength.text =
                     $"NoE File Length: {s.Length.ToString("#,#")}\n" +
                     $"E String Length: {eStringData.Length.ToString("#,#")}\n" +
@@ -213,13 +185,12 @@ namespace Evernorth.ColourCodes
             ioServer.iSeed = encrypt.iSeed;
 
 //TEST FOR STRIPPED & PADDED FILE
-            textOutput.text = encrypt.vString;
+            //textOutput.text = encrypt.vString;
 
             if (!isString && !hasData && !endOfStream)
             {
                 if (isTexturing)
                 {
-                    //Debug.Log("isTexturing");
                     ioServer.ReceiveData(eV3Data);
                     texture = new Texture(imagePixelCode, ioServer.dataStream);
                     sentData = true;
@@ -241,7 +212,7 @@ namespace Evernorth.ColourCodes
                 ioServer.ReceiveSData(eStringData);
                 
                 sentData = true;
-                textOutput.text = eStringData;
+                //textOutput.text = eStringData;
             }
         }
 
@@ -261,8 +232,6 @@ namespace Evernorth.ColourCodes
                 decrypt.ReceiveSData(ioServer.sDataStream);
             }
 
-
-
             // Start a new thread to run decryption on
             Thread t2 = new Thread(decrypt.DecryptStart);
             t2.Start();
@@ -273,8 +242,6 @@ namespace Evernorth.ColourCodes
 
         public void Validate()
         {
-            //textInput.text = "NO U"; //to confirm mismatch works
-
             string i = textInput.text;
             string o = textOutput.text;
 
@@ -346,7 +313,6 @@ namespace Evernorth.ColourCodes
                 btn_decrypt.interactable = true;
 
                 ioServer.endOfStream = true;
-                //Debug.Log("-- End of Stream --");
             }
 
 
@@ -365,7 +331,7 @@ namespace Evernorth.ColourCodes
                 float endValue = 0;
 
                 //if (decrypt.colArray != null)
-                    endValue = decrypt.dataLengthTotal;
+                endValue = decrypt.dataLengthTotal;
 
                 //Debug.Log($"EndValue: {endValue}");
 
@@ -377,13 +343,6 @@ namespace Evernorth.ColourCodes
                     {
                         slideValue = value / endValue * 100;
                     }
-
-                    /*
-                    Debug.Log(
-                    $"dataPos: {value}\n" +
-                    $"slideValue: {slideValue}\n" +
-                    $"endValue: {endValue}");
-                    */
 
                     yield return new WaitForEndOfFrame();
 

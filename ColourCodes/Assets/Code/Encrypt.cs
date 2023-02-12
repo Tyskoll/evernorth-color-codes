@@ -32,12 +32,13 @@ namespace Evernorth.ColourCodes
 
         public void UniqueStringCheck()
         {
+            //For testing
             CheckUnique(charactersE);
-            //Debug.Log($"Unique: {b}");
         }
 
         public void CheckUnique(string str)
         {
+            //For testing
             string repeated = "";
             string one = "";
             string two = "";
@@ -50,21 +51,15 @@ namespace Evernorth.ColourCodes
                     if ((one == two) && (i != j))
                     {
                         repeated = repeated + $"{one}\n";
-                    }
-                        
+                    } 
                 }
             }
-            /*
-            Debug.Log(
-                $"Length: {str.Length}\n" +
-                $"Not Unique: \n" +
-                $"{repeated}");
-            */
         }
 
         public Encrypt()
         {
-            UniqueStringCheck();
+            //For testing
+            //UniqueStringCheck();
 
             iSeed = Seed();
 
@@ -73,10 +68,6 @@ namespace Evernorth.ColourCodes
             AssignCharColors();
 
             charactersS = Shuffle(charactersE);
-
-            //step 2
-            //ColorToCharKey = new Dictionary<Vector3Int, char>();
-            //AssignColorToChars(CharToColorKey);
 
             IntToCharKey = new Dictionary<int, char>();
         }
@@ -114,13 +105,7 @@ namespace Evernorth.ColourCodes
                 {
                     Debug.Log($"Error: {e}");
                 }
-
             }
-            /*
-            Debug.Log(
-                $"-- Dictionary Key1 -- \n" +
-                $"Length: {CharToColorKey.Count}");
-            */
         }
 
         // Cheeck if the index position is empty
@@ -156,7 +141,6 @@ namespace Evernorth.ColourCodes
             }
 
             isEncrytped = true;
-            //Debug.Log($"StringToColor completed.");
 
             Shift(cArray);
 
@@ -165,7 +149,6 @@ namespace Evernorth.ColourCodes
 
         public string ColorToString(Vector3Int[] nCArray)
         {
-            //Debug.Log($"ColorToString, Length: {nCArray.Length}");
             string s = "";
 
             int seedPos = 0;
@@ -174,12 +157,6 @@ namespace Evernorth.ColourCodes
             {
                 if (seedPos >= 8)
                     seedPos = 0;
-                
-                /*
-                Debug.Log(
-                    $"PreShift" +
-                    $"\nx: {nCArray[i].x} y: {nCArray[i].y} z: {nCArray[i].z}");
-                */
 
                 int x = nCArray[i].x -= iSeed[seedPos];
                 seedPos++;
@@ -220,45 +197,6 @@ namespace Evernorth.ColourCodes
             return new string(array);
         }
 
-        /*
-        // Select random char for each Vector3Int in first key
-        public void AssignColorToChars(Dictionary<char, Vector3Int> cArray) //pass the first key to here
-        {
-            UsedChars = new List<char>();
-
-            string randCharacters = Shuffle(charactersE);
-
-            for (int i = 0; i < randCharacters.Length; i++)
-            {
-                Vector3Int v = cArray.ElementAt(i).Value;
-
-                char c = randCharacters[i];
-
-                if (!UsedChars.Contains(c))
-                {
-                    ColorToCharKey.TryAdd(v, c);
-                    UsedChars.Add(c);
-                }
-                else
-                {
-                    Debug.Log($"Already used: {c}");
-                }
-            }
-
-            Debug.Log(
-                $"-- Dictionary Key2 -- \n" +
-                $"Length: {ColorToCharKey.Count}");  
-        }
-        */
-
-        /*
-        // Add a KeyValuePair to the step two dictionary
-        public void SetColorCharPair(char c, Vector3Int col)
-        {
-            ColorToCharKey.Add(col, c);
-        }
-        */
-
         // Look up a character and get a Vector3Int from the dictionary
         Vector3Int ColorLookup(char c)
         {
@@ -296,13 +234,6 @@ namespace Evernorth.ColourCodes
             iSeed = seedValue;
             iSeedTxt = s;
 
-            /*
-            Debug.Log(
-                $"Encrypt Shift started\n" +
-                $"Key: {s}");
-            //end
-            */
-
             return seedValue;
         }
 
@@ -313,11 +244,6 @@ namespace Evernorth.ColourCodes
 
             for(int i = 0; i < cArray.Length; i++)
             {
-                /*
-                Debug.Log(
-                    $"PreShift" +
-                    $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
-                */
                 if (seedPos >= 255)
                     seedPos = 0;
 
@@ -328,17 +254,9 @@ namespace Evernorth.ColourCodes
                 cArray[i].z += iSeed[seedPos];
                 seedPos++;
                 seedPos++;  //with room to include alpha value
-
-                /*
-                Debug.Log(
-                    $"PostShift" +
-                    $"\nx: {cArray[i].x} y: {cArray[i].y} z: {cArray[i].z}");
-                */
             }
 
             uniqueValueCount = cArray.Distinct().Count();
-
-            //Debug.Log($"Unique Vector3Int count: {uniqueValueCount}");
 
             return cArray;
         }
@@ -358,10 +276,6 @@ namespace Evernorth.ColourCodes
             }
 
             vString = tempString;
-
-            Debug.Log(
-                $"V2S: \n" +
-                $"{vString}");
 
             return vString;
         }
