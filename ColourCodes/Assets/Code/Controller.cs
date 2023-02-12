@@ -328,12 +328,7 @@ namespace Evernorth.ColourCodes
             else
             {
                 float slideValue = 0.0f;
-                float endValue = 0;
-
-                //if (decrypt.colArray != null)
-                endValue = decrypt.dataLengthTotal;
-
-                //Debug.Log($"EndValue: {endValue}");
+                float endValue = decrypt.dataLengthTotal;
 
                 while (value <= endValue)
                 {

@@ -67,7 +67,6 @@ namespace Evernorth.ColourCodes
                 dataLengthTotal = eStringData.Length + (eStringData.Length / 3);
 
                 decompString = DecodeFromChar(eStringData);
-
                 sColArray = StringToVector(decompString);
 
                 ColorToString(sColArray);
@@ -183,16 +182,18 @@ namespace Evernorth.ColourCodes
 
             return cArray;
         }
-
+        //TO DO: Merge the two below functions in to one
         public string DecodeFromChar(string s)
         {
             string tempString = "";
 
-            for(int i = 0; i < s.Length;i++)
+            for(int i = 0; i < s.Length; i += 3)
             {
                 int i1 = charactersS.IndexOf(s[i]);
+                int i2 = charactersS.IndexOf(s[i+1]);
+                int i3 = charactersS.IndexOf(s[i+2]);
 
-                tempString = tempString + $"{i1.ToString("000")}";
+                tempString = tempString + $"{i1.ToString("000")}{i2.ToString("000")}{i3.ToString("000")}";
             }
 
             return tempString;
@@ -206,19 +207,9 @@ namespace Evernorth.ColourCodes
 
             for (int i = 0; i < s.Length; i += 9)
             {
-                string c1 = s[i].ToString();
-                string c2 = s[i+1].ToString();
-                string c3 = s[i+2].ToString();
-                string c4 = s[i+3].ToString();
-                string c5 = s[i+4].ToString();
-                string c6 = s[i+5].ToString();
-                string c7 = s[i+6].ToString();
-                string c8 = s[i+7].ToString();
-                string c9 = s[i+8].ToString();
-
-                string iS1 = $"{c1}{c2}{c3}";
-                string iS2 = $"{c4}{c5}{c6}";
-                string iS3 = $"{c7}{c8}{c9}";
+                string iS1 = s[i].ToString() + s[i+1].ToString() + s[i+2].ToString();
+                string iS2 = s[i+3].ToString() + s[i+4].ToString() + s[i+5].ToString();
+                string iS3 = s[i+6].ToString() + s[i+7].ToString() + s[i+8].ToString();
 
                 int i1 = int.Parse(iS1.ToString());
                 int i2 = int.Parse(iS2.ToString());
@@ -227,6 +218,7 @@ namespace Evernorth.ColourCodes
                 tempV3[vPos] = new Vector3Int(i1,i2,i3);
 
                 vPos++;
+                dataPos1 += 1;
             }
 
             string tmp = "";
