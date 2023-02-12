@@ -343,87 +343,25 @@ namespace Evernorth.ColourCodes
             return cArray;
         }
 
-        public void BuildString(Vector3Int[] cArray)
+        public string VectorToString(Vector3Int[] cArray)
         {
-            //RESULT PRINTING
-            Debug.Log("Padding 000");
-
+            Debug.Log("VectorToString");
             string tempString = "";
 
             for (int i = 0; i < cArray.Length; i++)
             {
-                string c1 = cArray[i].x.ToString("000");
-                string c2 =  cArray[i].y.ToString("000");
-                string c3 = cArray[i].z.ToString("000");
+                int i1 = int.Parse(cArray[i].x.ToString("000"));
+                int i2 = int.Parse(cArray[i].y.ToString("000"));
+                int i3 = int.Parse(cArray[i].z.ToString("000"));
 
-                tempString = tempString + $"{c1}{c2}{c3}";
+                tempString = tempString + charactersS[i1] + charactersS[i2] + charactersS[i3];
             }
 
             vString = tempString;
 
-            Debug.Log("End Padding");
-            //END
-            /*
             Debug.Log(
-                $"PADDED: \n" +
+                $"V2S: \n" +
                 $"{vString}");
-            */
-        }
-
-        public string EncodeToChar(string s)
-        {
-            Debug.Log("EncodeToChar");
-            string tempString = "";
-            int sPos = 0;
-            int sLength = (int)Math.Ceiling((decimal)(s.Length / 3));
-
-            //Debug.Log(
-            //    $"s.Length: {s.Length}\n" +
-            //    $"sLength : {sLength}");
-            
-            for (int i = 0; i < sLength ; i++)
-            {
-                char c1;
-                c1 = s[sPos];
-                sPos++;
-
-                char c2;
-                c2 = s[sPos];
-                sPos++;
-
-                char c3;
-                c3 = s[sPos];
-                sPos++;
-
-                string nS = ""; 
-                nS = nS + $"{c1}{c2}{c3}";
-
-                int nI = int.Parse(nS);
-
-                tempString = tempString + charactersS[nI];
-            }
-            
-            /*
-            for (int i = 0; i < sLength; i += 3)
-            {
-                string c1 = s[i].ToString();
-                string c2 = s[i+1].ToString();
-                string c3 = s[i+2].ToString();
-
-                string iS1 = $"{c1}{c2}{c3}";
-
-                int i1 = int.Parse(iS1.ToString());
-                char nC = charactersS[i1];
-
-                tempString = tempString + nC;
-            }
-            */
-            vString = tempString;
-
-            //Debug.Log(
-            //    $"RESULT\n" +
-            //    $"{vString}");
-            Debug.Log("End EncodeToChar");
 
             return vString;
         }
