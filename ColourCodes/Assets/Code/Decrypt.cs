@@ -62,12 +62,14 @@ namespace Evernorth.ColourCodes
 
         public void DecryptStart()
         {
-            if(isString)
+            if (isString)
             {
                 dataLengthTotal = eStringData.Length + (eStringData.Length / 3);
 
-                decompString = DecodeFromChar(eStringData);
-                sColArray = StringToVector(decompString);
+                //decompString = DecodeFromChar(eStringData);
+                //sColArray = StringToVector(decompString);
+
+                sColArray = StringToVector(eStringData);
 
                 ColorToString(sColArray);
 
@@ -201,19 +203,25 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] StringToVector(string s)
         {
-            Vector3Int[] tempV3 = new Vector3Int[s.Length / 9];
+            Debug.Log("StringToVector");
+            isDecrypting = true;
+
+            Vector3Int[] tempV3 = new Vector3Int[s.Length / 3];
+
+            Debug.Log($"s L: {s.Length}\n" +
+                $"tempV3 L {tempV3.Length}");
 
             int vPos = 0;
 
-            for (int i = 0; i < s.Length; i += 9)
+            for (int i = 0; i < s.Length; i += 3)
             {
-                string iS1 = s[i].ToString() + s[i+1].ToString() + s[i+2].ToString();
-                string iS2 = s[i+3].ToString() + s[i+4].ToString() + s[i+5].ToString();
-                string iS3 = s[i+6].ToString() + s[i+7].ToString() + s[i+8].ToString();
+                string iS1 = $"{charactersS.IndexOf(s[i]).ToString("000")}";
+                string iS2 = $"{charactersS.IndexOf(s[i+1]).ToString("000")}";
+                string iS3 = $"{charactersS.IndexOf(s[i+2]).ToString("000")}";
 
-                int i1 = int.Parse(iS1.ToString());
-                int i2 = int.Parse(iS2.ToString());
-                int i3 = int.Parse(iS3.ToString());
+                int i1 = int.Parse(iS1);
+                int i2 = int.Parse(iS2);
+                int i3 = int.Parse(iS3);
 
                 tempV3[vPos] = new Vector3Int(i1,i2,i3);
 
@@ -221,13 +229,19 @@ namespace Evernorth.ColourCodes
                 dataPos1 += 1;
             }
 
-            string tmp = "";
-
+            //string tmp = "";
+            /*
             foreach(Vector3Int v3 in tempV3)
             {
                 tmp = tmp + $"{v3.x}{v3.y}{v3.z}";
+                Debug.Log($"{v3.x}{v3.y}{v3.z}");
             }
-
+            */
+/*
+            Debug.Log(
+                $"End StringToVector\n" +
+                $"{tmp}");
+*/
             return tempV3;
         }
 
