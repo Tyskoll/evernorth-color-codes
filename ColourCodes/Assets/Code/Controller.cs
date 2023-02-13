@@ -56,12 +56,17 @@ namespace Evernorth.ColourCodes
         public Toggle tgl_isTexturing;
 
 
-        public float value;
-        public Slider slider_percentage;
-        public TMP_Text percentage_txt;
-        public Image sliderFillImage;
+        public float decryptValue;
+        public Slider slider_DecryptPercentage;
+        public TMP_Text decryptPercentage_txt;
+        public Image sliderDecryptFillImage;
+        private IEnumerator decryptProgressBar;
 
-        private IEnumerator progressBar;
+        public float encryptValue;
+        public Slider slider_EncryptPercentage;
+        public TMP_Text encryptPercentage_txt;
+        public Image sliderEncryptFillImage;
+        private IEnumerator encryptProgressBar;
 
         public bool isString = true;
         public bool isVector3 = false;
@@ -161,6 +166,9 @@ namespace Evernorth.ColourCodes
                 textFileLength.text = $"File Length: {s.Length.ToString("#,#")}";
                 eV3Data = encrypt.StringToColor(s);
 
+                //for separate threda/progress bar 
+                //encrypt.stringData = s;
+
                 if (isString)
                 {
                     eStringData = encrypt.VectorToString(eV3Data);
@@ -236,8 +244,8 @@ namespace Evernorth.ColourCodes
             Thread t2 = new Thread(decrypt.DecryptStart);
             t2.Start();
 
-            progressBar = ProgressBar();
-            StartCoroutine(progressBar);
+            decryptProgressBar = DecryptProgressBar();
+            StartCoroutine(decryptProgressBar);
         }
 
         public void Validate()
@@ -298,8 +306,8 @@ namespace Evernorth.ColourCodes
                 btn_decrypt.interactable = false;
                 btn_strCompare.interactable = true;
 
-                UpdateSlider(100f); //<--- for when it decrypts too fast to update the progress bar.
-                StopCoroutine(progressBar);
+                UpdateDecryptSlider(100f); //<--- for when it decrypts too fast to update the progress bar.
+                StopCoroutine(decryptProgressBar);
                 textOutput.text = decrypt.outputText;
             }
 
@@ -317,42 +325,78 @@ namespace Evernorth.ColourCodes
 
 
         }
-#endregion
+        #endregion
 
-#region ProgressBar
+        #region ProgressBar
 
-        IEnumerator ProgressBar()
+
+        IEnumerator EncryptProgressBar()
+        {
+            if (isEncrypted)
+                UpdateEncryptSlider(100f);
+            else
+            {
+                float slideValue = 0.0f;
+                float endValue = encrypt.dataLengthTotal;
+
+                while (decryptValue <= endValue)
+                {
+                    encryptValue = encrypt.dataPos1 + encrypt.dataPos2;
+
+                    if (decryptValue != 0)
+                    {
+                        slideValue = encryptValue / endValue * 100;
+                    }
+
+                    yield return new WaitForEndOfFrame();
+
+                    UpdateEncryptSlider(slideValue);
+                }
+            }
+        }
+
+        void UpdateEncryptSlider(float slideValue)
+        {
+            slider_EncryptPercentage.value = slideValue;
+            decryptPercentage_txt.text = $"{Mathf.Round(slider_EncryptPercentage.value)}%";
+            if (Mathf.Round(slider_EncryptPercentage.value) == 100)
+            {
+                sliderDecryptFillImage.color = Color.green;
+            }
+        }
+
+        IEnumerator DecryptProgressBar()
         {
             if (isDecrypted)
-                UpdateSlider(100f);
+                UpdateDecryptSlider(100f);
             else
             {
                 float slideValue = 0.0f;
                 float endValue = decrypt.dataLengthTotal;
 
-                while (value <= endValue)
+                while (decryptValue <= endValue)
                 {
-                    value = decrypt.dataPos1 + decrypt.dataPos2;
+                    decryptValue = decrypt.dataPos1 + decrypt.dataPos2;
 
-                    if (value != 0)
+                    if (decryptValue != 0)
                     {
-                        slideValue = value / endValue * 100;
+                        slideValue = decryptValue / endValue * 100;
                     }
 
                     yield return new WaitForEndOfFrame();
 
-                    UpdateSlider(slideValue);
+                    UpdateDecryptSlider(slideValue);
                 }
             }
         }
 
-        void UpdateSlider(float slideValue)
+        void UpdateDecryptSlider(float slideValue)
         {
-            slider_percentage.value = slideValue;
-            percentage_txt.text = $"{Mathf.Round(slider_percentage.value)}%";
-            if(Mathf.Round(slider_percentage.value) == 100)
+            slider_DecryptPercentage.value = slideValue;
+            decryptPercentage_txt.text = $"{Mathf.Round(slider_DecryptPercentage.value)}%";
+            if(Mathf.Round(slider_DecryptPercentage.value) == 100)
             {
-                sliderFillImage.color = Color.green;
+                sliderDecryptFillImage.color = Color.green;
             }
         }
 #endregion

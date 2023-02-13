@@ -25,11 +25,12 @@ namespace Evernorth.ColourCodes
 
         public string decompString;
 
-        public int dataLengthTotal;
+
 
         Vector3Int colV = new Vector3Int(0, 0, 0);
         char c = '\u0000';
 
+        public int dataLengthTotal;
         public int dataPos1 = 0;
         public int dataPos2 = 0;
         public bool isDecrypting;
@@ -183,22 +184,6 @@ namespace Evernorth.ColourCodes
             }
 
             return cArray;
-        }
-        //TO DO: Merge the two below functions in to one
-        public string DecodeFromChar(string s)
-        {
-            string tempString = "";
-
-            for(int i = 0; i < s.Length; i += 3)
-            {
-                int i1 = charactersS.IndexOf(s[i]);
-                int i2 = charactersS.IndexOf(s[i+1]);
-                int i3 = charactersS.IndexOf(s[i+2]);
-
-                tempString = tempString + $"{i1.ToString("000")}{i2.ToString("000")}{i3.ToString("000")}";
-            }
-
-            return tempString;
         }
 
         public Vector3Int[] StringToVector(string s)

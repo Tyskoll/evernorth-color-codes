@@ -19,6 +19,7 @@ namespace Evernorth.ColourCodes
         public string iSeedTxt;
         public int uniqueValueCount;
 
+        public string stringData;
         public string vString;
 
         public Dictionary<char, Vector3Int> CharToColorKey;
@@ -28,7 +29,12 @@ namespace Evernorth.ColourCodes
 
         public List<char> UsedChars;
 
+        public int dataLengthTotal;
+        public int dataPos1 = 0;
+        public int dataPos2 = 0;
         public bool isEncrytped;
+        public bool isEncrypting;
+        public bool isString;
 
         public void UniqueStringCheck()
         {
@@ -70,6 +76,23 @@ namespace Evernorth.ColourCodes
             charactersS = Shuffle(charactersE);
 
             IntToCharKey = new Dictionary<int, char>();
+        }
+
+        public void EncryptStart()
+        {
+            if (isString)
+            {
+                dataLengthTotal = stringData.Length + (stringData.Length / 3);
+
+                //decompString = DecodeFromChar(eStringData);
+                //sColArray = StringToVector(decompString);
+
+            }
+            else if (!isString)
+            {
+                dataLengthTotal = CharArray3D.Length;
+                StringToColor(stringData);
+            }
         }
 
         // Generate random Vector3Int for each char in character string
@@ -175,6 +198,7 @@ namespace Evernorth.ColourCodes
                 char c = CharLookup(v3i);
                 
                 s += c;
+                dataPos1 += 1;
             }
 
 
@@ -273,6 +297,8 @@ namespace Evernorth.ColourCodes
                 int i3 = int.Parse(cArray[i].z.ToString("000"));
 
                 tempString = tempString + charactersS[i1] + charactersS[i2] + charactersS[i3];
+
+                dataPos2 += 1;
             }
 
             vString = tempString;
