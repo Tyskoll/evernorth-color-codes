@@ -11,8 +11,6 @@ namespace Evernorth.ColourCodes
         public char[,,] CharArray3D;
         public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$£%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r\t";
         public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890™!%^&*<>?¤†×÷‡±¶§«»©®æÆÇ;()ÊËÉÈìÍÌÎÏ.œŒôöòõøÓÔÕØÒšŠûÙÚÛŸýÝžŽªÞþƒßµðÐ¬¿¡¥£€¢¹²³½¼¾¦üéâäàåçêëèïîùÿÖÜáíóúñÑАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ";
-
-
         public string charactersS;
 
         public int[] iSeed;
@@ -21,6 +19,8 @@ namespace Evernorth.ColourCodes
 
         public string stringData;
         public string vString;
+        public Vector3Int[] eV3Data;
+        public string eStringData;
 
         public Dictionary<char, Vector3Int> CharToColorKey;
         public Dictionary<Vector3Int, char> ColorToCharKey;
@@ -32,7 +32,7 @@ namespace Evernorth.ColourCodes
         public int dataLengthTotal;
         public int dataPos1 = 0;
         public int dataPos2 = 0;
-        public bool isEncrytped;
+        public bool isEncrypted;
         public bool isEncrypting;
         public bool isString;
 
@@ -80,19 +80,23 @@ namespace Evernorth.ColourCodes
 
         public void EncryptStart()
         {
+            isEncrypting = true;
+
             if (isString)
             {
                 dataLengthTotal = stringData.Length + (stringData.Length / 3);
 
-                //decompString = DecodeFromChar(eStringData);
-                //sColArray = StringToVector(decompString);
-
+                eV3Data = new Vector3Int[stringData.Length];
+                eV3Data = StringToColor(stringData);
+                eStringData = VectorToString(eV3Data);
             }
             else if (!isString)
             {
                 dataLengthTotal = CharArray3D.Length;
-                StringToColor(stringData);
+                eV3Data = StringToColor(stringData);
             }
+
+            isEncrypting = false;
         }
 
         // Generate random Vector3Int for each char in character string
@@ -160,49 +164,15 @@ namespace Evernorth.ColourCodes
             {
                 Vector3Int colV = ColorLookup(s[i]);
                 cArray[i] = colV;
-   
+                dataPos1++;
             }
-
-            isEncrytped = true;
 
             Shift(cArray);
 
+            if (!isString)
+                isEncrypted = true;
+
             return cArray;
-        }
-
-        public string ColorToString(Vector3Int[] nCArray)
-        {
-            string s = "";
-
-            int seedPos = 0;
-
-            for (int i = 0; i < nCArray.Length; i++)
-            {
-                if (seedPos >= 8)
-                    seedPos = 0;
-
-                int x = nCArray[i].x -= iSeed[seedPos];
-                seedPos++;
-                int y = nCArray[i].y += iSeed[seedPos];
-                seedPos++;
-                int z = nCArray[i].z -= iSeed[seedPos];
-                seedPos++;
-
-                Vector3Int v3i = new Vector3Int(x, y, z);
-
-                
-                Debug.Log(
-                    $"PostShift" +
-                    $"\nx: {nCArray[i].x} y: {nCArray[i].y} z: {nCArray[i].z}");
-                
-                char c = CharLookup(v3i);
-                
-                s += c;
-                dataPos1 += 1;
-            }
-
-
-            return s;
         }
 
         public string Shuffle(string str)
@@ -302,6 +272,9 @@ namespace Evernorth.ColourCodes
             }
 
             vString = tempString;
+
+            if (isString)
+                isEncrypted = true;
 
             return vString;
         }

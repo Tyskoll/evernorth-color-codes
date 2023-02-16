@@ -3299,7 +3299,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1467724701}
         m_TargetAssemblyTypeName: Evernorth.ColourCodes.Controller, Assembly-CSharp
-        m_MethodName: EncryptString
+        m_MethodName: EncryptData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5454,6 +5454,7 @@ MonoBehaviour:
   currentColor:
     serializedVersion: 2
     rgba: 0
+  isEncrypting: 0
   isEncrypted: 0
   isDecrypted: 0
   hasData: 0
@@ -5477,13 +5478,13 @@ MonoBehaviour:
   tgl_isRendering: {fileID: 995578117}
   tgl_isTexturing: {fileID: 1440128025}
   decryptValue: 0
-  slider_DecryptPercentage: {fileID: 0}
-  decryptPercentage_txt: {fileID: 0}
-  sliderDecryptFillImage: {fileID: 0}
+  slider_DecryptPercentage: {fileID: 61432595}
+  decryptPercentage_txt: {fileID: 217095766}
+  sliderDecryptFillImage: {fileID: 1166315333}
   encryptValue: 0
-  slider_EncryptPercentage: {fileID: 0}
-  encryptPercentage_txt: {fileID: 0}
-  sliderEncryptFillImage: {fileID: 0}
+  slider_EncryptPercentage: {fileID: 1424578693}
+  encryptPercentage_txt: {fileID: 596259673}
+  sliderEncryptFillImage: {fileID: 213499985}
   isString: 1
   isVector3: 0
   isTexturing: 0

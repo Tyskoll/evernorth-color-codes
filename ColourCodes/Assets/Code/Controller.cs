@@ -26,6 +26,7 @@ namespace Evernorth.ColourCodes
         public Color32 currentColor;
 
         //Helpers
+        public bool isEncrypting;
         public bool isEncrypted;
         public bool isDecrypted;
         public bool hasData;
@@ -55,6 +56,7 @@ namespace Evernorth.ColourCodes
         public Toggle tgl_isRendering;
         public Toggle tgl_isTexturing;
 
+        bool runOnce = false;
 
         public float decryptValue;
         public Slider slider_DecryptPercentage;
@@ -80,7 +82,7 @@ namespace Evernorth.ColourCodes
             SetToggles();
             
 
-            Thread t1 = Thread.CurrentThread;
+            Thread t0 = Thread.CurrentThread;
             // Instantiate new Encrypt and generate KeyValuePairs
             encrypt = new Encrypt();
 
@@ -158,6 +160,24 @@ namespace Evernorth.ColourCodes
             isString = false;
         }
 
+        public void UpdateFileDataUI()
+        {
+            if (isString)
+            {
+                textFileLength.text =
+                $"NoE File Length: {encrypt.stringData.Length.ToString("#,#")}\n" +
+                $"E String Length: {encrypt.eStringData.Length.ToString("#,#")}\n" +
+                $"Unique Values:    {encrypt.uniqueValueCount.ToString("#,#")}";
+            }
+            else
+            {
+                textFileLength.text =
+                    $"File Length:      {encrypt.stringData.Length.ToString("#,#")}\n" +
+                    $"Unique Values:    {encrypt.uniqueValueCount.ToString("#,#")}";
+            }
+        }
+
+        /*
         public void EncryptString()
         {
             if(!hasData && !endOfStream)
@@ -165,9 +185,6 @@ namespace Evernorth.ColourCodes
                 string s = textInput.text;
                 textFileLength.text = $"File Length: {s.Length.ToString("#,#")}";
                 eV3Data = encrypt.StringToColor(s);
-
-                //for separate threda/progress bar 
-                //encrypt.stringData = s;
 
                 if (isString)
                 {
@@ -187,19 +204,41 @@ namespace Evernorth.ColourCodes
                 }
             }
         }
+        */
+
+        public void EncryptData()
+        {
+            if (isString)
+                encrypt.isString = true;
+
+            if (!isString)
+                encrypt.isString = false;
+
+            if (!hasData && !endOfStream)
+            {
+                encrypt.stringData = textInput.text;
+
+                // Start a new thread to run decryption on
+                Thread t1 = new Thread(encrypt.EncryptStart);
+                t1.Start();
+
+                encryptProgressBar = EncryptProgressBar();
+                StartCoroutine(encryptProgressBar);
+            }
+        }
 
         public void SendData()
         {
             ioServer.iSeed = encrypt.iSeed;
 
 //TEST FOR STRIPPED & PADDED FILE
-            //textOutput.text = encrypt.vString;
+            textOutput.text = encrypt.eStringData;
 
             if (!isString && !hasData && !endOfStream)
             {
                 if (isTexturing)
                 {
-                    ioServer.ReceiveData(eV3Data);
+                    ioServer.ReceiveData(encrypt.eV3Data);
                     texture = new Texture(imagePixelCode, ioServer.dataStream);
                     sentData = true;
 
@@ -210,17 +249,17 @@ namespace Evernorth.ColourCodes
                 }
                 else
                 {
-                    ioServer.ReceiveData(eV3Data);
+                    ioServer.ReceiveData(encrypt.eV3Data);
                     sentData = true;
                 }
             }
 
             if (isString && !hasData && !endOfStream)
             {
-                ioServer.ReceiveSData(eStringData);
+                ioServer.ReceiveSData(encrypt.eStringData);
                 
                 sentData = true;
-                //textOutput.text = eStringData;
+                //textOutput.text = encrypt.eStringData;
             }
         }
 
@@ -273,7 +312,8 @@ namespace Evernorth.ColourCodes
         void Update()
         {
             ticker = ioServer.ticker;
-            isEncrypted = encrypt.isEncrytped;
+            isEncrypting = encrypt.isEncrypting;
+            isEncrypted = encrypt.isEncrypted;
             bCasting = ioServer.bCasting;
             hasData = ioServer.hasData;
             endOfStream = ioServer.endOfStream;
@@ -285,6 +325,13 @@ namespace Evernorth.ColourCodes
             {
                 btn_encrypt.interactable = false;
                 btn_send.interactable = true;
+
+                if(!runOnce)
+                {
+                    runOnce = true;
+                    UpdateFileDataUI();
+                }
+                
             }
 
             if (bCasting && !endOfStream)
@@ -309,6 +356,14 @@ namespace Evernorth.ColourCodes
                 UpdateDecryptSlider(100f); //<--- for when it decrypts too fast to update the progress bar.
                 StopCoroutine(decryptProgressBar);
                 textOutput.text = decrypt.outputText;
+            }
+
+            if (isEncrypted)
+            {
+                btn_encrypt.interactable = false;
+
+                UpdateEncryptSlider(100f); //<--- for when it encrypts too fast to update the progress bar.
+                StopCoroutine(encryptProgressBar);
             }
 
             if (isRendering && sentData && !endOfStream)
@@ -339,11 +394,11 @@ namespace Evernorth.ColourCodes
                 float slideValue = 0.0f;
                 float endValue = encrypt.dataLengthTotal;
 
-                while (decryptValue <= endValue)
+                while (encryptValue <= endValue)
                 {
                     encryptValue = encrypt.dataPos1 + encrypt.dataPos2;
 
-                    if (decryptValue != 0)
+                    if (encryptValue != 0)
                     {
                         slideValue = encryptValue / endValue * 100;
                     }
@@ -358,10 +413,10 @@ namespace Evernorth.ColourCodes
         void UpdateEncryptSlider(float slideValue)
         {
             slider_EncryptPercentage.value = slideValue;
-            decryptPercentage_txt.text = $"{Mathf.Round(slider_EncryptPercentage.value)}%";
+            encryptPercentage_txt.text = $"{Mathf.Round(slider_EncryptPercentage.value)}%";
             if (Mathf.Round(slider_EncryptPercentage.value) == 100)
             {
-                sliderDecryptFillImage.color = Color.green;
+                sliderEncryptFillImage.color = Color.green;
             }
         }
 

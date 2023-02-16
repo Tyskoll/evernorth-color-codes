@@ -23,10 +23,6 @@ namespace Evernorth.ColourCodes
         public Vector3Int[] sColArray;
         public string outputText;
 
-        public string decompString;
-
-
-
         Vector3Int colV = new Vector3Int(0, 0, 0);
         char c = '\u0000';
 
@@ -66,9 +62,6 @@ namespace Evernorth.ColourCodes
             if (isString)
             {
                 dataLengthTotal = eStringData.Length + (eStringData.Length / 3);
-
-                //decompString = DecodeFromChar(eStringData);
-                //sColArray = StringToVector(decompString);
 
                 sColArray = StringToVector(eStringData);
 
