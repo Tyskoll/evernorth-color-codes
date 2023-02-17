@@ -84,7 +84,7 @@ namespace Evernorth.ColourCodes
 
             if (isString)
             {
-                dataLengthTotal = stringData.Length + (stringData.Length / 3);
+                dataLengthTotal = stringData.Length * 2;// + (stringData.Length * 3);
 
                 eV3Data = new Vector3Int[stringData.Length];
                 eV3Data = StringToColor(stringData);

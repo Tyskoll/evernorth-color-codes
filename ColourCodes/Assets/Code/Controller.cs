@@ -232,7 +232,7 @@ namespace Evernorth.ColourCodes
             ioServer.iSeed = encrypt.iSeed;
 
 //TEST FOR STRIPPED & PADDED FILE
-            textOutput.text = encrypt.eStringData;
+            //textOutput.text = encrypt.eStringData;
 
             if (!isString && !hasData && !endOfStream)
             {
@@ -307,9 +307,7 @@ namespace Evernorth.ColourCodes
         }
 #endregion
 
-#region Update
-        // Update is called once per frame
-        void Update()
+        void UpdateBools()
         {
             ticker = ioServer.ticker;
             isEncrypting = encrypt.isEncrypting;
@@ -320,19 +318,13 @@ namespace Evernorth.ColourCodes
             currentColor = ioServer.colorOut;
             isDecrypting = decrypt.isDecrypting;
             isDecrypted = decrypt.isDecrypted;
+        }
 
-            if(isEncrypted && !hasData)
-            {
-                btn_encrypt.interactable = false;
-                btn_send.interactable = true;
-
-                if(!runOnce)
-                {
-                    runOnce = true;
-                    UpdateFileDataUI();
-                }
-                
-            }
+#region Update
+        // Update is called once per frame
+        void Update()
+        {
+            UpdateBools();
 
             if (bCasting && !endOfStream)
             {
@@ -370,7 +362,8 @@ namespace Evernorth.ColourCodes
             {
                 ioServer.Update();
             }
-            else if (!isRendering && sentData && !endOfStream && hasData)
+            
+            if (!isRendering && sentData && !endOfStream && hasData)
             {
                 btn_send.interactable = false;
                 btn_decrypt.interactable = true;
@@ -378,6 +371,17 @@ namespace Evernorth.ColourCodes
                 ioServer.endOfStream = true;
             }
 
+            if (isEncrypted && !hasData)
+            {
+                btn_encrypt.interactable = false;
+                btn_send.interactable = true;
+
+                if (!runOnce)
+                {
+                    runOnce = true;
+                    UpdateFileDataUI();
+                }
+            }
 
         }
         #endregion
