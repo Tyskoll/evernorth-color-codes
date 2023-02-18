@@ -17,6 +17,8 @@ namespace Evernorth.ColourCodes
         public IOServer ioServer;
         public Texture texture;
 
+        public Tokenize tokenize;
+
         Vector3Int[] eV3Data;
         string eStringData;
 
@@ -80,7 +82,6 @@ namespace Evernorth.ColourCodes
         void Start()
         {
             SetToggles();
-            
 
             Thread t0 = Thread.CurrentThread;
             // Instantiate new Encrypt and generate KeyValuePairs
@@ -109,6 +110,16 @@ namespace Evernorth.ColourCodes
 
             return colorToCharKey;
         }
+
+        #region Tokenizer
+
+        public void BuildTokens()
+        {
+            tokenize = new Tokenize(textInput.text);
+            tokenize.BuildTokenList();
+        }
+
+        #endregion
 
         #region UI
         public void SetToggles()
