@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
@@ -118,10 +119,12 @@ namespace Evernorth.ColourCodes
 
             isDecrypting = true;
 
+            StringBuilder sb = new StringBuilder();
+
             for (int i = 0; i < newCArray.Length; i++)
             {
                 char c = CharLookup(newCArray[i]);
-                s += c;
+                sb.Append(c);
                 dataPos2 += 1;
 
                 if (dataPos2 >= newCArray.Length)
@@ -131,7 +134,7 @@ namespace Evernorth.ColourCodes
                 }
             }
 
-            outputText = s;
+            outputText = sb.ToString();
         }
 
         // Retrieve char from KeyPair dictionary based on colour Key provided
@@ -193,13 +196,13 @@ namespace Evernorth.ColourCodes
 
             for (int i = 0; i < s.Length; i += 3)
             {
-                string iS1 = $"{charactersS.IndexOf(s[i]).ToString("000")}";
-                string iS2 = $"{charactersS.IndexOf(s[i+1]).ToString("000")}";
-                string iS3 = $"{charactersS.IndexOf(s[i+2]).ToString("000")}";
+                //string iS1 = $"{charactersS.IndexOf(s[i]).ToString("000")}";
+                //string iS2 = $"{charactersS.IndexOf(s[i+1]).ToString("000")}";
+                //string iS3 = $"{charactersS.IndexOf(s[i+2]).ToString("000")}";
 
-                int i1 = int.Parse(iS1);
-                int i2 = int.Parse(iS2);
-                int i3 = int.Parse(iS3);
+                int i1 = int.Parse(charactersS.IndexOf(s[i]).ToString("000"));
+                int i2 = int.Parse(charactersS.IndexOf(s[i+1]).ToString("000"));
+                int i3 = int.Parse(charactersS.IndexOf(s[i+2]).ToString("000"));
 
                 tempV3[vPos] = new Vector3Int(i1,i2,i3);
 

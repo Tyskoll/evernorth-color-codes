@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -258,20 +259,19 @@ namespace Evernorth.ColourCodes
         public string VectorToString(Vector3Int[] cArray)
         {
             Debug.Log("VectorToString");
-            string tempString = "";
+
+            StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < cArray.Length; i++)
             {
-                int i1 = int.Parse(cArray[i].x.ToString("000"));
-                int i2 = int.Parse(cArray[i].y.ToString("000"));
-                int i3 = int.Parse(cArray[i].z.ToString("000"));
-
-                tempString = tempString + charactersS[i1] + charactersS[i2] + charactersS[i3];
+                sb.Append(charactersS[int.Parse(cArray[i].x.ToString("000"))]);
+                sb.Append(charactersS[int.Parse(cArray[i].y.ToString("000"))]);
+                sb.Append(charactersS[int.Parse(cArray[i].z.ToString("000"))]);
 
                 dataPos2 += 1;
             }
 
-            vString = tempString;
+            vString = sb.ToString();
 
             if (isString)
                 isEncrypted = true;
