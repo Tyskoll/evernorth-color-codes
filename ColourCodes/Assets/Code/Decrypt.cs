@@ -38,7 +38,7 @@ namespace Evernorth.ColourCodes
 
         public Vector3Int[] cArray;
 
-        public Decrypt(IOServer ioServer, Dictionary<Vector3Int, char> colorToCharKey, string charactersS)//Dictionary<char, Vector3Int> charToColorKey)
+        public Decrypt(IOServer ioServer, Dictionary<Vector3Int, char> colorToCharKey, string charactersS)
         {
             this.ioServer = ioServer;
             this.ColorToCharKey = colorToCharKey;
@@ -196,10 +196,6 @@ namespace Evernorth.ColourCodes
 
             for (int i = 0; i < s.Length; i += 3)
             {
-                //string iS1 = $"{charactersS.IndexOf(s[i]).ToString("000")}";
-                //string iS2 = $"{charactersS.IndexOf(s[i+1]).ToString("000")}";
-                //string iS3 = $"{charactersS.IndexOf(s[i+2]).ToString("000")}";
-
                 int i1 = int.Parse(charactersS.IndexOf(s[i]).ToString("000"));
                 int i2 = int.Parse(charactersS.IndexOf(s[i+1]).ToString("000"));
                 int i3 = int.Parse(charactersS.IndexOf(s[i+2]).ToString("000"));
@@ -210,25 +206,8 @@ namespace Evernorth.ColourCodes
                 dataPos1 += 1;
             }
 
-            //string tmp = "";
-            /*
-            foreach(Vector3Int v3 in tempV3)
-            {
-                tmp = tmp + $"{v3.x}{v3.y}{v3.z}";
-                Debug.Log($"{v3.x}{v3.y}{v3.z}");
-            }
-            */
-/*
-            Debug.Log(
-                $"End StringToVector\n" +
-                $"{tmp}");
-*/
             return tempV3;
         }
-
-
-
-
 
         // To-do:
         // Read pixel colour instead of values from array.

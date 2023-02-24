@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.Threading;
 using System;
 using UnityEngine.TextCore.Text;
+using System.IO;
 
 namespace Evernorth.ColourCodes
 {
@@ -83,6 +84,8 @@ namespace Evernorth.ColourCodes
         {
             SetToggles();
 
+            LoadResource();
+
             Thread t0 = Thread.CurrentThread;
             // Instantiate new Encrypt and generate KeyValuePairs
             encrypt = new Encrypt();
@@ -109,6 +112,21 @@ namespace Evernorth.ColourCodes
             }
 
             return colorToCharKey;
+        }
+
+        public void LoadResource()
+        {
+            string path = @"Assets/Resources/cantrbry_plus/alice29.txt";
+
+            //Read the text from directly from the txt file
+
+            StreamReader reader = new StreamReader(path, System.Text.Encoding.UTF8);
+
+            Debug.Log($"FileLength: {reader.BaseStream.Length}");
+
+            textInput.text = reader.ReadToEnd();
+
+            reader.Close();
         }
 
         #region Tokenizer
@@ -187,35 +205,6 @@ namespace Evernorth.ColourCodes
                     $"Unique Values:    {encrypt.uniqueValueCount.ToString("#,#")}";
             }
         }
-
-        /*
-        public void EncryptString()
-        {
-            if(!hasData && !endOfStream)
-            {
-                string s = textInput.text;
-                textFileLength.text = $"File Length: {s.Length.ToString("#,#")}";
-                eV3Data = encrypt.StringToColor(s);
-
-                if (isString)
-                {
-                    eStringData = encrypt.VectorToString(eV3Data);
-
-                    textFileLength.text =
-                    $"NoE File Length: {s.Length.ToString("#,#")}\n" +
-                    $"E String Length: {eStringData.Length.ToString("#,#")}\n" +
-                    $"Unique Values:    {encrypt.uniqueValueCount.ToString("#,#")}";
-
-                }
-                else
-                {
-                    textFileLength.text =
-                        $"File Length:      {s.Length.ToString("#,#")}\n" +
-                        $"Unique Values:    {encrypt.uniqueValueCount.ToString("#,#")}";
-                }
-            }
-        }
-        */
 
         public void EncryptData()
         {

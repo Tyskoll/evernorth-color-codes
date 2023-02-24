@@ -89,6 +89,11 @@ namespace Evernorth.ColourCodes
 
                 eV3Data = new Vector3Int[stringData.Length];
                 eV3Data = StringToColor(stringData);
+
+                Debug.Log($"StringDataL: {stringData.Length}");
+                Debug.Log($"eV3DataL: {eV3Data.Length}");
+
+
                 eStringData = VectorToString(eV3Data);
             }
             else if (!isString)
@@ -256,17 +261,28 @@ namespace Evernorth.ColourCodes
             return cArray;
         }
 
-        public string VectorToString(Vector3Int[] cArray)
+        public string VectorToString(Vector3Int[] eV3Data)
         {
             Debug.Log("VectorToString");
 
+            Debug.Log($"eV3DataL: {eV3Data.Length}");
+
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < cArray.Length; i++)
+            for (int i = 0; i < eV3Data.Length; i++)
             {
-                sb.Append(charactersS[int.Parse(cArray[i].x.ToString("000"))]);
-                sb.Append(charactersS[int.Parse(cArray[i].y.ToString("000"))]);
-                sb.Append(charactersS[int.Parse(cArray[i].z.ToString("000"))]);
+                try
+                {
+                    sb.Append(charactersS[int.Parse(eV3Data[i].x.ToString("000"))]);
+                    sb.Append(charactersS[int.Parse(eV3Data[i].y.ToString("000"))]);
+                    sb.Append(charactersS[int.Parse(eV3Data[i].z.ToString("000"))]);
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError(
+                        $"ERROR: " +
+                        $"\nDataPos: {dataPos2}");
+                }
 
                 dataPos2 += 1;
             }
