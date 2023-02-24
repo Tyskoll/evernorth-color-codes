@@ -116,7 +116,7 @@ namespace Evernorth.ColourCodes
 
         public void LoadResource()
         {
-            string path = @"Assets/Resources/cantrbry_plus/alice29.txt";
+            string path = @"Assets/Resources/cantrbry_plus/kjv_bible.txt";
 
             //Read the text from directly from the txt file
 
