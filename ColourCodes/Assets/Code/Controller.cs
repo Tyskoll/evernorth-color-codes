@@ -116,7 +116,7 @@ namespace Evernorth.ColourCodes
 
         public void LoadResource()
         {
-            string path = @"Assets/Resources/cantrbry_plus/kjv_bible.txt";
+            string path = @"Assets/Resources/cantrbry_plus/alice29.txt";
 
             //Read the text from directly from the txt file
 
@@ -127,6 +127,21 @@ namespace Evernorth.ColourCodes
             textInput.text = reader.ReadToEnd();
 
             reader.Close();
+        }
+
+        public void WriteToFile()
+        {
+            string path = @"F:\Unity Projects\Text Output\eStringOut.txt";
+
+            FileStream stream = null;
+            stream = new FileStream(path, FileMode.OpenOrCreate);
+
+            using (StreamWriter writer = new StreamWriter(stream, System.Text.Encoding.UTF8))
+            {
+                writer.Write(encrypt.eStringData); 
+                writer.Close();
+            }
+
         }
 
         #region Tokenizer
