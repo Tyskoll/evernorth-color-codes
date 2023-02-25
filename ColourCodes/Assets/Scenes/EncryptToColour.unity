@@ -3154,7 +3154,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: +256 Per Element Shift
+  m_Text: + 256 Per Element Shift
 --- !u!222 &816779707
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3728,7 +3728,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1 Pixel per colour (left box)
+  m_Text: 1 Pixel per char (left box)
 --- !u!222 &907687214
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5969,7 +5969,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: +256 Shift +3 to 1 256 Char Cypher
+  m_Text: + 256 Shift + 1-3 256 Char Cypher
 --- !u!222 &1565240177
 CanvasRenderer:
   m_ObjectHideFlags: 0
