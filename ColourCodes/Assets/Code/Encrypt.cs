@@ -216,9 +216,9 @@ namespace Evernorth.ColourCodes
 
         public int[] Seed()
         {
-            int[] seedValue = new int[256];
+            int[] seedValue = new int[4096];
 
-            for(int i = 0; i < 255; i++)
+            for(int i = 0; i < 4095; i++)
             {
                 int d = UnityEngine.Random.Range(0, 10);
                 seedValue[i] = d;
@@ -244,7 +244,7 @@ namespace Evernorth.ColourCodes
 
             for(int i = 0; i < cArray.Length; i++)
             {
-                if (seedPos >= 255)
+                if (seedPos >= 4095)
                     seedPos = 0;
 
                 cArray[i].x += iSeed[seedPos];

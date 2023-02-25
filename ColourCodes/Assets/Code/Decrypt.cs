@@ -164,7 +164,7 @@ namespace Evernorth.ColourCodes
 
             for (int i = 0; i < cArray.Length; i++)
             {
-                if (seedPos >= 255)
+                if (seedPos >= 4095)
                     seedPos = 0;
 
                 if (cArray[i].x != 0)
