@@ -13,7 +13,7 @@ namespace Evernorth.ColourCodes
 
         public Tokenize(string sData)
         {
-            this.sData=sData;
+            this.sData = sData;
         }
 
         public List<string> BuildTokenList()

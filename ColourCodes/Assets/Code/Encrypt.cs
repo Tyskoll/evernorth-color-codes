@@ -11,10 +11,10 @@ namespace Evernorth.ColourCodes
     {
         public char[,,] CharArray3D;
         public string characters = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890!@#$£%^&*()-_=+[{]}|\\;:'\",./<>?`~ \n\r\t";
-        public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890™!%^&*<>?¤†×÷‡±¶§«»©®æÆÇ;()ÊËÉÈìÍÌÎÏ.œŒôöòõøÓÔÕØÒšŠûÙÚÛŸýÝžŽªÞþƒßµðÐ¬¿¡¥£€¢¹²³½¼¾¦üéâäàåçêëèïîùÿÖÜáíóúñÑАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ";
+        public string charactersE = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890™!%^&*<>?¤†×÷‡±¶§«»©®æÆÇ;()ÊËÉÈìÍÌÎÏ.œŒôöòõøÓÔÕØÒšŠûÙÚÛŸýÝžŽªÞþƒßµðÐ¬¿¡¥£€¢¹²³½¼¾¦üéâäàåçêëèïîùÿÖÜáíóúñÑАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюяᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ"; 
         public string charactersS;
 
-        public int[] iSeed;
+        public byte[] iSeed;
         public string iSeedTxt;
         public int uniqueValueCount;
 
@@ -214,14 +214,14 @@ namespace Evernorth.ColourCodes
             return c;
         }
 
-        public int[] Seed()
+        public byte[] Seed()
         {
-            int[] seedValue = new int[4096];
+            byte[] seedValue = new byte[4096];
 
             for(int i = 0; i < 4095; i++)
             {
                 int d = UnityEngine.Random.Range(0, 10);
-                seedValue[i] = d;
+                seedValue[i] = (byte)d;
             }
 
             //iSeed printing

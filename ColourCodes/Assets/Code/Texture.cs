@@ -60,7 +60,7 @@ namespace Evernorth.ColourCodes
 
             texture.Apply();
 
-            Save_Texture2D(texture, @"F:\Unity Projects\Image Output\out.png");
+            Save_Texture2D(texture, @"F:\Unity Projects\EncryptToColour\Image Output\out.png");
 
             return texture;
         }

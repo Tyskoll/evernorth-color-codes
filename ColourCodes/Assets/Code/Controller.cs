@@ -124,7 +124,7 @@ namespace Evernorth.ColourCodes
 
             Debug.Log($"FileLength: {reader.BaseStream.Length}");
 
-            textInput.text = reader.ReadToEnd();
+            textInput.text = reader.ReadToEnd(); //"Ohai, superfrens.";//
 
             reader.Close();
         }
@@ -247,7 +247,7 @@ namespace Evernorth.ColourCodes
             ioServer.iSeed = encrypt.iSeed;
 
 //TEST FOR STRIPPED & PADDED FILE
-            //textOutput.text = encrypt.eStringData;
+            textOutput.text = encrypt.eStringData;
 
             if (!isString && !hasData && !endOfStream)
             {

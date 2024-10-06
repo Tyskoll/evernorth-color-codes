@@ -17,7 +17,7 @@ namespace Evernorth.ColourCodes
         public Dictionary<char, Vector3Int> CharToColorKey;
         public string charactersS;
 
-        public int[] iSeed;
+        public byte[] iSeed;
 
         public Vector3Int[] colArray;
         public string eStringData;

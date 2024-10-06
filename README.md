@@ -1,5 +1,5 @@
 # evernorth-color-codes
-Copyright 2023 Evernorth Software & Entertainment
+Copyright 2023-2024 Evernorth Software & Entertainment
 
 Symmetric key cypher utilizing 3D arrays to encrypt to colour values + more.
 
